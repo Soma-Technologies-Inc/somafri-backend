@@ -12,7 +12,7 @@
     "db-migrate": "npx sequelize db:migrate",
     "demigrate": "sequelize db:migrate:undo:all",
     "migrate": "sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:all",
-    "test": "NODE_ENV=test npm run migrate && NODE_ENV=test nyc --reporter=html --reporter=text mocha --require @babel/register --timeout 3000 ./src/tests/mainTest.test.js --exit",
+    "test": "nyc --export=text mocha --require @babel/register src/tests/*.js --exit",
     "coverage": "npm run test  && nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
@@ -38,6 +38,7 @@
     "@google-cloud/storage": "^5.1.2",
     "@hapi/joi": "^17.0.0",
     "@hapi/joi-date": "^2.0.1",
+    "apollo-server-express": "^2.16.1",
     "aws-sdk": "^2.713.0",
     "babel-eslint": "^10.0.3",
     "babel-plugin-transform-regenerator": "^6.26.0",
