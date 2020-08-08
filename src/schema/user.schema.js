@@ -1,6 +1,6 @@
-const { gql } = require('apollo-server-express');
+import { gql } from 'apollo-server-express';
 
-const typeDefs = gql`
+export default gql`
   type User {
     id: Int!
     email: String!
@@ -11,6 +11,7 @@ const typeDefs = gql`
   type Query {
     getOneUser(id: Int!): User
     getUsers: [User!]!
+    me:User
   }
   type Mutation {
     createUser(
@@ -18,7 +19,12 @@ const typeDefs = gql`
       firstName: String!
       lastName: String!
       isVerified: Boolean
-    ): User!
+    ): Token!
   }
+
+  type Token {
+    token: String!
+  }
+
 `;
-module.exports = typeDefs;
+

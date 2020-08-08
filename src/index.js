@@ -1,23 +1,59 @@
-
+import 'dotenv/config';
+import cors from 'cors';
+import morgan from 'morgan';
+import http from 'http';
+import jwt from 'jsonwebtoken';
+import DataLoader from 'dataloader';
 import express from 'express';
-import bodyParser from 'body-parser';
-import { config } from 'dotenv';
-import { ApolloServer, gql } from 'apollo-server-express';
+import {
+  ApolloServer,
+  AuthenticationError,
+} from 'apollo-server-express';
 
-config(); //
-
-const port = process.env.PORT || 3000;
-// GraphQl Schema
-
-const typeDefs = require('./schema/index');
-const resolvers = require('./resolvers/index');
-const models = require('./database/models');
-
-const server = new ApolloServer({ typeDefs, resolvers, context: { models } });
+import schema from './schema';
+import resolvers from './resolvers';
+import models, { sequelize } from './database/models';
+import loaders from './loaders';
+import verifyTokens from './helpers/verify.token';
 
 const app = express();
-server.applyMiddleware({ app });
 
-app.listen({ port: 3000 }, () => console.log(`🚀 Server ready at http://localhost:3000${server.graphqlPath}`));
+app.use(cors());
 
-export default app;
+
+const server = new ApolloServer({
+  introspection: true,
+  playground: true,
+  typeDefs: schema,
+  resolvers,
+  context: async ({ req, connection }) => {
+    if (connection) {
+      return {
+        models,
+        loaders: {
+          user: new DataLoader(keys =>
+            loaders.user.batchUsers(keys, models),
+          ),
+        },
+      };
+    }
+    const token = req.headers.auth || '';
+    const user = verifyTokens.verifyAllTokens(token);
+    // add the user to the context
+    return { user };
+
+  },
+});
+
+server.applyMiddleware({ app, path: '/graphql' });
+
+const httpServer = http.createServer(app);
+server.installSubscriptionHandlers(httpServer);
+
+const port = process.env.PORT || 8000;
+
+
+    app.listen({ port }, () => {
+      console.log(`Apollo Server on http://localhost:${port}/graphql`);
+    });
+

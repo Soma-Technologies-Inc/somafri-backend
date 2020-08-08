@@ -1,16 +1,40 @@
-import chai from 'chai';
-import chaiHttp from 'chai-http';
-import app from '../app';
+import { expect } from 'chai';
+import * as userApi from './api';
 
-chai.use(chaiHttp);
-chai.should();
+describe('Create user', () => {
+  it('user creating account', async () => {
+    // sign up
 
-describe('App Tests', () => {
-  it('should not return the homepage', (done) => {
-    chai.request(app).get('/')
-      .end((err, res) => {
-        res.should.have.status(404);
-        done();
-      });
+    let {
+      data: {
+        data: {
+          createUser: { token },
+        },
+      },
+    } = await userApi.createUser({
+      email:"benny.ogidan@benny.com",
+      firstName:"RUKUNDO", 
+      lastName:"thomas",
+      isVerified:true
+      
+    });
+    console.log('==-=-=-=-=->>');
+
+    const {
+      data: {
+        data: { me },
+      },
+    } = await userApi.me(token);
+    // expect(me).to.eql({
+    //   id: '3',
+    //   email:"benny.ogidan@benny.com",
+    //   firstName:"RUKUNDO", 
+    //   lastName:"thomas",
+    //   isVerified:true
+    // });
+
+
+
+
   });
 });
