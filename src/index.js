@@ -39,6 +39,9 @@ const server = new ApolloServer({
       };
     }
     const token = req.headers.auth || '';
+    if(token === ''){
+      return null;
+    }
     const user = verifyTokens.verifyAllTokens(token);
     return { user };
 
