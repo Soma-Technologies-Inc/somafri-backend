@@ -8,10 +8,14 @@ const UserResolvers = {
   Query: {
     getUsers: async (root, args, context) => {
       const user = await context.user;
+      if(user === null){
+        throw new ForbiddenError('Please provide token first');
+      }
       if(user.role !== 'admin'){
         throw new ForbiddenError('you are not authorized to perfom this task.');
       }
-      return db.user.findAll();
+      const users = await db.user.findAll()
+      return users;
     },
   },
   Mutation: {

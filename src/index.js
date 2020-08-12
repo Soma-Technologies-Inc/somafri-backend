@@ -15,6 +15,7 @@ import resolvers from './resolvers';
 import models, { sequelize } from './database/models';
 import loaders from './loaders';
 import verifyTokens from './helpers/verify.token';
+import routes from './routes/index';
 
 const app = express();
 
@@ -38,9 +39,6 @@ const server = new ApolloServer({
       };
     }
     const token = req.headers.auth || '';
-    if(token === ''){
-      return null;
-    }
     const user = verifyTokens.verifyAllTokens(token);
     // add the user to the context
     return { user };
@@ -52,11 +50,11 @@ server.applyMiddleware({ app, path: '/graphql' });
 
 const httpServer = http.createServer(app);
 server.installSubscriptionHandlers(httpServer);
-
+app.use('/soma',routes);
 const port = process.env.PORT || 8000;
 
 
     app.listen({ port }, () => {
-      console.log(`Apollo Server on http://localhost:${port}/graphql`);
+      console.log(`Apollo Server on http://localhost:${port}`);
     });
 
