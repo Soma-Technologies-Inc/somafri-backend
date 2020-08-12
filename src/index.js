@@ -39,9 +39,6 @@ const server = new ApolloServer({
       };
     }
     const token = req.headers.auth || '';
-    if(token === ''){
-      return null;
-    }
     const user = verifyTokens.verifyAllTokens(token);
     return { user };
 
@@ -53,10 +50,13 @@ server.applyMiddleware({ app, path: '/graphql' });
 const httpServer = http.createServer(app);
 server.installSubscriptionHandlers(httpServer);
 app.use('/soma',routes);
+<<<<<<< HEAD
 app.use((req, res) => res.status(404).send({
   status: 404,
   error: 'route Not Found!',
 }));
+=======
+>>>>>>> ft(music):
 const port = process.env.PORT || 8000;
     app.listen({ port }, () => {
       console.log(`Apollo Server on http://localhost:${port}`);

@@ -20,6 +20,10 @@ class verifyTokens {
 
       decodedToken.token = token;
       if (user === undefined) {
+<<<<<<< HEAD
+=======
+
+>>>>>>> ft(music):
         return response.errorMessage(
           res,
           'You provided the invalid token!',

@@ -1,11 +1,16 @@
 import { emit } from 'nodemon';
 import db from '../database/models';
+<<<<<<< HEAD
 import Queries from './Queries';
 
 class UserServices {
   static async CreateUser(NewUser) {
     return Queries.create(db.user, NewUser);
   }
+=======
+
+class UserServices {
+>>>>>>> ft(music):
 
   static async findUserByEmail(email) {
     try {
@@ -18,6 +23,7 @@ class UserServices {
     }
   }
 
+<<<<<<< HEAD
   static async getUserProfile(email) {
     try {
       const user = await db.user.findOne({ where: { email } });
@@ -140,5 +146,8 @@ class UserServices {
       return undefined;
     }
   }
+=======
+  
+>>>>>>> ft(music):
 }
 export default UserServices;
