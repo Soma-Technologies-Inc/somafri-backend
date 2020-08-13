@@ -3,9 +3,11 @@ import { gql } from 'apollo-server-express';
 export default gql`
   type User {
     id: Int!
-    email: String!
     firstName: String!
-    lastName: String
+    lastName: String!
+    email: String!
+    password: String!
+    primaryLanguageId: Int!
     isVerified: Boolean!
   }
   type Query {
@@ -15,14 +17,32 @@ export default gql`
   }
   type Mutation {
     createUser(
-      email: String!
       firstName: String!
       lastName: String!
+      email: String!
+      password: String!
+      primaryLanguageId: Int!
       isVerified: Boolean
-    ): Token!
+    ): userInfo!
+
+    loginUser(
+      email: String!
+      password: String!
+    ): loginInfo!
   }
 
-  type Token {
+  type userInfo {
+    firstName: String!
+    lastName: String!
+    email: String!
+    token: String!
+    primaryLanguageId: Int!
+    isVerified: Boolean
+  }
+
+  type loginInfo {
+    status: String!
+    message: String!
     token: String!
   }
 

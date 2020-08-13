@@ -24,7 +24,7 @@ app.use(cors());
 const server = new ApolloServer({
   introspection: true,
   playground: true,
-  typeDefs: schema,
+  typeDefs: schema, 
   resolvers,
   context: async ({ req, connection }) => {
     if (connection) {
