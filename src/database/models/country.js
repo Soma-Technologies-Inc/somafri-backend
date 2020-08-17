@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     flag: DataTypes.STRING
   }, {});
   country.associate = function(models) {
-    // associations can be defined here
+
   };
   return country;
 };
