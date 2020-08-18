@@ -7,6 +7,12 @@ class Validate {
       check('music', 'music link is required').isLength({ min: 1 }),
     ];
   }
+
+  static video() {
+    return [
+      check('video', 'video link is required').isLength({ min: 1 }),
+    ];
+  }
 }
 
 export default Validate;

@@ -1,24 +1,24 @@
 import response from "../helpers/response";
-import AudioServices from "../services/audio.services";
-class MusicsController {
-  static async addMusic(req, res) {
+import VideoServices from "../services/video.services";
+class VideosController {
+  static async addVideo(req, res) {
     try {
       if (!req.file) {
-        return response.errorMessage(res, "Please enter music audio", 400);
+        return response.errorMessage(res, "Please enter Video ", 400);
       }
-      const musicLink = req.file.location;
+      const videoLink = req.file.location;
       const { title, languageId, genre, category } = req.body;
       const data = {
         title,
-        musicLink,
+        videoLink,
         languageId,
         genre,
         category,
       };
-     await AudioServices.create(data);
+      await VideoServices.create(data);
       return response.successMessage(
         res,
-        'Audio was created successfully',
+        'Video was created successfully',
         201,
       );
     } catch (error) {
@@ -27,4 +27,4 @@ class MusicsController {
   }
 }
 
-export default MusicsController;
+export default VideosController;

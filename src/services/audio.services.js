@@ -1,7 +1,7 @@
 import { emit } from 'nodemon';
 import db from '../database/models';
 
-class MusicServices {
+class AudioServices {
 
   /**
  * creating user query
@@ -11,7 +11,7 @@ class MusicServices {
  */
 static async create( data) {
     try {
-      const datas = await db.music.create(data);
+      const datas = await db.audio.create(data);
       return datas;
     } catch (error) {
       return error;
@@ -20,4 +20,4 @@ static async create( data) {
 
   
 }
-export default MusicServices;
+export default AudioServices;
