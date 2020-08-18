@@ -1,7 +1,6 @@
 import { check } from 'express-validator';
 
 class Validate {
-<<<<<<< HEAD
   static signup() {
     return [
       check('firstName', 'First name should be valid.')
@@ -102,12 +101,17 @@ class Validate {
     return [
       check('content', 'content is required').isLength({ min: 1 }),
       check('rootContentId', 'rootContentId is required').isNumeric(),
-=======
-
+    ]
+    }
   static music() {
     return [
       check('music', 'music link is required').isLength({ min: 1 }),
->>>>>>> ft(music):
+    ];
+  }
+
+  static video() {
+    return [
+      check('video', 'video link is required').isLength({ min: 1 }),
     ];
   }
 }

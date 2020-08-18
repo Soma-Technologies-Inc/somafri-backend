@@ -18,16 +18,11 @@ const UserResolvers = {
   Query: {
     getUsers: async (root, args, context) => {
       const user = await context.user;
-<<<<<<< HEAD
-      if (user.role !== "admin") {
-        throw new ForbiddenError("you are not authorized to perfom this task.");
-=======
       if(user === null){
         throw new ForbiddenError('Please provide token first');
       }
       if(user.role !== 'admin'){
         throw new ForbiddenError('you are not authorized to perfom this task.');
->>>>>>> ft(music):
       }
       const users = await db.user.findAll()
       return users;

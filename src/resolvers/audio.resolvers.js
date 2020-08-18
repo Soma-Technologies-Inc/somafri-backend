@@ -5,58 +5,58 @@ import { ForbiddenError } from "apollo-server";
 const { Op, where, cast, col } = Sequelize;
 import { isAuthenticated, isAdmin } from "../middlewares/auth";
 
-const UserResolvers = {
+const AudioResolvers = {
   Query: {
-    getAllMusics: async (root, args, context) => {
+    getAllAudios: async (root, args, context) => {
       const user = await context.user;
       if (user === null) {
         throw new ForbiddenError("Please provide token first");
       }
-      return db.music.findAll();
+      return db.audio.findAll();
     },
-    getMusicByLanguageId: async (root, { languageId }, context, args) => {
+    getAudioByLanguageId: async (root, { languageId }, context, args) => {
       const user = await context.user;
       if (user === null) {
         throw new ForbiddenError("Please provide token first");
       }
-      const Music = await db.music.findAll({
+      const Audio = await db.audio.findAll({
         where: { languageId },
       });
-      if (!Music) {
-        throw new ForbiddenError("Music does not exist");
+      if (!Audio) {
+        throw new ForbiddenError("Audio does not exist");
       }
 
-      return Music;
+      return Audio;
     },
-    getMusicById: async (root, { id }, context, args) => {
+    getAudioById: async (root, { id }, context, args) => {
       const user = await context.user;
       if (user === null) {
         throw new ForbiddenError("Please provide token first");
       }
-      const Music = await db.music.findOne({
+      const Audio = await db.audio.findOne({
         where: { id },
       });
-      if (!Music) {
-        throw new ForbiddenError("Music does not exist");
+      if (!Audio) {
+        throw new ForbiddenError("Audio does not exist");
       }
 
-      return Music;
+      return Audio;
     },
-    getMusicByCategory: async (root, { category }, context, args) => {
+    getAudioByCategory: async (root, { category }, context, args) => {
       const user = await context.user;
       if (user === null) {
         throw new ForbiddenError("Please provide token first");
       }
-      const Music = await db.music.findAll({
+      const Audio = await db.audio.findAll({
         where: { category },
       });
-      if (!Music) {
-        throw new ForbiddenError("Music with category does not exist");
+      if (!Audio) {
+        throw new ForbiddenError("Audio with category does not exist");
       }
 
-      return Music;
+      return Audio;
     },
-    getMusicByCategoryAndLanguageId: async (
+    getAudioByCategoryAndLanguageId: async (
       root,
       { languageId, category },
       context,
@@ -66,21 +66,21 @@ const UserResolvers = {
       if (user === null) {
         throw new ForbiddenError("Please provide token first");
       }
-      const Music = await db.music.findAll({
+      const Audio = await db.audio.findAll({
         where: {
           [Op.and]: [{ languageId }, { category }],
         },
       });
-      if (!Music) {
-        throw new ForbiddenError("Music with category does not exist");
+      if (!Audio) {
+        throw new ForbiddenError("Audio with category does not exist");
       }
-      if(Music.length === 0){
-        throw new ForbiddenError("Music with that category and language does not exist");
+      if(Audio.length === 0){
+        throw new ForbiddenError("Audio with that category and language does not exist");
       }
 
-      return Music;
+      return Audio;
     },
-  }
+  } 
 };
 
-module.exports = UserResolvers;
+module.exports = AudioResolvers;
