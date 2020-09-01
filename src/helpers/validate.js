@@ -101,6 +101,17 @@ class Validate {
     return [
       check('content', 'content is required').isLength({ min: 1 }),
       check('rootContentId', 'rootContentId is required').isNumeric(),
+    ]
+    }
+  static music() {
+    return [
+      check('music', 'music link is required').isLength({ min: 1 }),
+    ];
+  }
+
+  static video() {
+    return [
+      check('video', 'video link is required').isLength({ min: 1 }),
     ];
   }
 }

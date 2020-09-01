@@ -9,7 +9,7 @@ import {
   ApolloServer,
   AuthenticationError,
 } from 'apollo-server-express';
-
+import bodyParser from 'body-parser';
 import schema from './schema';
 import resolvers from './resolvers';
 import models, { sequelize } from './database/models';
@@ -17,10 +17,15 @@ import loaders from './loaders';
 import verifyTokens from './helpers/verify.token';
 import routes from './routes/index';
 
+
 const app = express();
 
 app.use(cors());
-
+app.use(express.json());
+app.use(cors());
+app.use(express.static('src/assets/files'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 const server = new ApolloServer({
   introspection: true,
