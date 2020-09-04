@@ -11,50 +11,69 @@ import EncryptPassword from "../helpers/Encryptor";
 import LanguageServices from "../services/language";
 import UserServices from "../services/users";
 import comparePassword from "../helpers/Decryptor";
-import mailer from '../helpers/send.email';
-import LanguageHelper from '../helpers/languages.helper';
+import mailer from "../helpers/send.email";
+import LanguageHelper from "../helpers/languages.helper";
+import pubsub, { EVENTS } from "../subscriptions";
+import Subscription from "../subscriptions";
+import { subscribe } from "graphql";
 
 const UserResolvers = {
   Query: {
     getUsers: async (root, args, context) => {
       const user = await context.user;
-      if(user === null){
-        throw new ForbiddenError('Please provide token first');
+      if (user === null) {
+        throw new ForbiddenError("Please provide token first");
       }
-      if(user.role !== 'admin'){
-        throw new ForbiddenError('you are not authorized to perfom this task.');
+      if (user.role !== "admin") {
+        throw new ForbiddenError("you are not authorized to perfom this task.");
       }
-      const users = await db.user.findAll()
+      const users = await db.user.findAll();
       return users;
     },
     getUserProfile: async (root, args, context) => {
       try {
         const userInfo = await context.user;
-        const { email, id:userId, primaryLanguageId } = userInfo;
+        const { email, id: userId, primaryLanguageId } = userInfo;
         const languagesResponse = [];
-        const enrolledLanguage = await LanguageServices.getEnrolledLanguages(userId);
-        await Promise.all(enrolledLanguage.map(async (language, index) => { 
-          const {
-            languageId, id, currentLevel, totalLevel, countryFlag, updatedAt, createdAt, currentCourseId, currentCourseName,
-          } = language.dataValues;
-          const findLanguage = await LanguageHelper.getLanguageName(languageId);
-  
-          const LanguageName = findLanguage.name;
-          languagesResponse.push({
-            id,
-            userId,
-            currentLevel,
-            totalLevel,
-            languageId,
-            LanguageName,
-            countryFlag,
-            currentCourseId,
-            currentCourseName,
-            updatedAt,
-            createdAt,
-          });
-        }));
-        const primaryLanguageName = await LanguageHelper.getLanguageName(primaryLanguageId);
+        const enrolledLanguage = await LanguageServices.getEnrolledLanguages(
+          userId
+        );
+        await Promise.all(
+          enrolledLanguage.map(async (language, index) => {
+            const {
+              languageId,
+              id,
+              currentLevel,
+              totalLevel,
+              countryFlag,
+              updatedAt,
+              createdAt,
+              currentCourseId,
+              currentCourseName,
+            } = language.dataValues;
+            const findLanguage = await LanguageHelper.getLanguageName(
+              languageId
+            );
+
+            const LanguageName = findLanguage.name;
+            languagesResponse.push({
+              id,
+              userId,
+              currentLevel,
+              totalLevel,
+              languageId,
+              LanguageName,
+              countryFlag,
+              currentCourseId,
+              currentCourseName,
+              updatedAt,
+              createdAt,
+            });
+          })
+        );
+        const primaryLanguageName = await LanguageHelper.getLanguageName(
+          primaryLanguageId
+        );
         const user = await UserServices.findUserByEmail(email);
         const userData = {
           id: user.dataValues.id,
@@ -68,10 +87,9 @@ const UserResolvers = {
           primaryLanguage: primaryLanguageName.dataValues.name,
           role: user.dataValues.role,
           Language: languagesResponse,
-  
         };
         if (user) {
-          return userData
+          return userData;
         }
         throw new UserInputError("Could not found the user in our system");
       } catch (error) {
@@ -82,7 +100,7 @@ const UserResolvers = {
   Mutation: {
     createUser: async (
       root,
-      { firstName, lastName, email, password, primaryLanguageId},
+      { firstName, lastName, email, password, primaryLanguageId },
       { models }
     ) => {
       const findUser = await UserServices.getUserProfile(email);
@@ -114,8 +132,9 @@ const UserResolvers = {
         token,
       });
       const emailView = mailer.activateAccountView(token, firstName);
-      mailer.sendEmail(email, 'Verification link', emailView);
-      return {
+      mailer.sendEmail(email, "Verification link", emailView);
+
+      const userInfos = {
         firstName,
         lastName,
         email,
@@ -123,6 +142,12 @@ const UserResolvers = {
         isVerified: false,
         token,
       };
+
+      pubsub.publish(EVENTS.USER.GET_USERS, {
+        newUser: userInfos,
+      });
+
+      return userInfos;
     },
     loginUser: async (root, { email, password }, { models }) => {
       const user = await UserServices.getUserProfile(email);
@@ -144,56 +169,57 @@ const UserResolvers = {
       });
       await UserServices.updateUser(email, { token });
       const data = {
-          id: user.id,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: email,
-          profileImage: user.profileImage,
-          role: user.role,
-          isVerified: user.isVerified,
-          primaryLanguageId: user.primaryLanguageId,
-          token,
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: email,
+        profileImage: user.profileImage,
+        role: user.role,
+        isVerified: user.isVerified,
+        primaryLanguageId: user.primaryLanguageId,
+        token,
       };
 
       return data;
     },
-    getUserRole: async (root, { email,}, context, args) => {
+    getUserRole: async (root, { email }, context, args) => {
       const user = await context.user;
       if (user === null) {
         throw new ForbiddenError("Please provide token first");
-      }else if (user.role !== "admin") {
+      } else if (user.role !== "admin") {
         throw new ForbiddenError("you are not authorized to perfom this task.");
       }
       const findUser = await UserServices.findUserByEmail(email);
       if (!findUser) {
         throw new UserInputError("user email not registered!");
       }
-      return { 
-      userEmail: findUser.email,
-      userRole: findUser.role,};
+      return {
+        userEmail: findUser.email,
+        userRole: findUser.role,
+      };
     },
 
-    updateUserRole: async (root, { email,role}, context, args) => {
+    updateUserRole: async (root, { email, role }, context, args) => {
       const user = await context.user;
       if (user === null) {
         throw new ForbiddenError("Please provide token first");
-      }else if (user.role !== "admin") {
+      } else if (user.role !== "admin") {
         throw new ForbiddenError("you are not authorized to perfom this task.");
       }
       const findUser = await UserServices.findUserByEmail(email);
       if (!findUser) {
         throw new UserInputError("user email not registered!");
       }
-        const updateRole = await UserServices.updateUserRole(email, role);
-        if (updateRole) {
-          return {
-            message:'Role updated successfully',
-            userEmail: findUser.email,
-            userRole: role,
-          };
-        }
+      const updateRole = await UserServices.updateUserRole(email, role);
+      if (updateRole) {
+        return {
+          message: "Role updated successfully",
+          userEmail: findUser.email,
+          userRole: role,
+        };
+      }
     },
-    sendResetPasswordLink: async (root, { email}, context, args) => {
+    sendResetPasswordLink: async (root, { email }, context, args) => {
       const findUser = await UserServices.findUserByEmail(email);
       if (!findUser) {
         throw new UserInputError("user email not registered!");
@@ -204,11 +230,16 @@ const UserResolvers = {
         id: findUser.id,
       });
       const emailView = mailer.resetPasswordView(token, findUser.firstName);
-      mailer.sendEmail(email, 'Reset Password', emailView);
+      mailer.sendEmail(email, "Reset Password", emailView);
 
       return {
-        message:'Email sent please check you email to reset your password',
+        message: "Email sent please check you email to reset your password",
       };
+    },
+  },
+  Subscription: {
+    newUser: {
+      subscribe: () => pubsub.asyncIterator(EVENTS.USER.GET_USERS),
     },
   },
 };
