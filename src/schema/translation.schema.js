@@ -9,8 +9,23 @@ export default gql`
     to: String!
     userId:Int!
   }
-  extend type Query {
-    getTranslationsByUserId(userId: Int!): [Translation!]!
+
+  type Translations {
+    BeforeTranslation:BeforeTranslation!
+    AfterTranslation:AfterTranslation!
   }
+
+  type BeforeTranslation{
+    from:String!
+    question:String!
+  }
+  type AfterTranslation{
+    to:String!
+    answer:String!
+  }
+  extend type Query {
+    getTranslationsByUserId(userId: Int!): [Translations!]!
+  }
+
 `;
 
