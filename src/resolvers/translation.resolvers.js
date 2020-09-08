@@ -1,5 +1,5 @@
 import db from "../database/models";
-import Sequelize from 'sequelize';
+import Sequelize from "sequelize";
 import { combineResolvers, skip } from "graphql-resolvers";
 import { ForbiddenError } from "apollo-server";
 const { Op, where, cast, col } = Sequelize;
@@ -15,13 +15,25 @@ const TransaltionResolvers = {
       const TranslationHistory = await db.translation.findAll({
         where: { userId },
       });
-      if (!TranslationHistory) {
-        throw new ForbiddenError("Translation history does not exist");
-      }
+      const data = [];
+      TranslationHistory.map((history,index)=>{
+        data.push(
+          {
+            BeforeTranslation: {
+              from: TranslationHistory[index].dataValues.from,
+              question: TranslationHistory[index].dataValues.question,
+            },
+            AfterTranslation: {
+              to: TranslationHistory[index].dataValues.to,
+              answer: TranslationHistory[index].dataValues.answer,
+            },
+          },
+        )
+      })
 
-      return TranslationHistory;
+      return data;
     },
-  } 
+  },
 };
 
 module.exports = TransaltionResolvers;
