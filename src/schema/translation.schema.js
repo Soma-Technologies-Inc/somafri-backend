@@ -16,12 +16,12 @@ export default gql`
   }
 
   type BeforeTranslation{
-    from:String!
-    question:String!
+    language:String!
+    text:String!
   }
   type AfterTranslation{
-    to:String!
-    answer:String!
+    language:String!
+    text:String!
   }
   extend type Query {
     getTranslationsByUserId(userId: Int!): [Translations!]!
