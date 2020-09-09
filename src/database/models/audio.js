@@ -5,7 +5,8 @@ module.exports = (sequelize, DataTypes) => {
     musicLink: DataTypes.STRING,
     languageId: DataTypes.INTEGER,
     genre: DataTypes.STRING,
-    category: DataTypes.STRING
+    category: DataTypes.STRING,
+    duration: DataTypes.TIME
   }, {});
   audio.associate = function(models) {
     // associations can be defined here
