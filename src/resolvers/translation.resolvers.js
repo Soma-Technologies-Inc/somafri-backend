@@ -20,12 +20,12 @@ const TransaltionResolvers = {
         data.push(
           {
             BeforeTranslation: {
-              from: TranslationHistory[index].dataValues.from,
-              question: TranslationHistory[index].dataValues.question,
+              language: TranslationHistory[index].dataValues.from,
+              text: TranslationHistory[index].dataValues.question,
             },
             AfterTranslation: {
-              to: TranslationHistory[index].dataValues.to,
-              answer: TranslationHistory[index].dataValues.answer,
+              language: TranslationHistory[index].dataValues.to,
+              text: TranslationHistory[index].dataValues.answer,
             },
           },
         )
