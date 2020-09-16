@@ -1,12 +1,12 @@
-import environment from 'dotenv';
-import checkEmailpassword from '../middlewares/users';
-import UserServices from '../services/users';
-import LanguageServices from '../services/language';
-import EncryptPassword from '../helpers/Encryptor';
-import response from '../helpers/response';
-import mailer from '../helpers/send.email';
-import GenerateToken from '../helpers/token';
-import profileHelper from '../helpers/profile.helper';
+import environment from "dotenv";
+import checkEmailpassword from "../middlewares/users";
+import UserServices from "../services/users";
+import LanguageServices from "../services/language";
+import EncryptPassword from "../helpers/Encryptor";
+import response from "../helpers/response";
+import mailer from "../helpers/send.email";
+import GenerateToken from "../helpers/token";
+import profileHelper from "../helpers/profile.helper";
 
 environment.config();
 class UserController {
@@ -14,7 +14,7 @@ class UserController {
     const user = await UserServices.findUserByEmail(req.body.email);
     if (user == null) {
       const status = 404;
-      return response.errorMessage(res, 'Your Account is not created', status);
+      return response.errorMessage(res, "Your Account is not created", status);
     }
     const token = GenerateToken({
       id: user.id,
@@ -38,18 +38,27 @@ class UserController {
     };
     return response.successMessage(
       res,
-      'user has logged in successfully',
+      "user has logged in successfully",
       200,
-      data,
+      data
     );
   }
 
   static async googleAndFacebookMobileSignUp(req, res) {
     const {
-      firstName, lastName, email, authtype, profileImage, primaryLanguageId,
+      firstName,
+      lastName,
+      email,
+      authtype,
+      profileImage,
+      primaryLanguageId,
     } = req.body;
     const token = GenerateToken({
-      lastName, firstName, email, primaryLanguageId, isVerified: true,
+      lastName,
+      firstName,
+      email,
+      primaryLanguageId,
+      isVerified: true,
     });
     const userData = {
       firstName,
@@ -59,32 +68,27 @@ class UserController {
       profileImage,
       primaryLanguageId,
       isVerified: true,
-      role: 'standard',
+      role: "standard",
       token,
     };
     const userCreated = await UserServices.findOrCreateUser(userData);
     const findLanguage = await LanguageServices.getLanguage(primaryLanguageId);
-    return response.successMessage(
-      res,
-      'user created successfully',
-      201,
-      {
-        id: userCreated.id,
-        firstName,
-        lastName,
-        email,
-        primaryLanguage: findLanguage.name,
-        isVerified: true,
-        token,
-      },
-    );
+    return response.successMessage(res, "user created successfully", 201, {
+      id: userCreated.id,
+      firstName,
+      lastName,
+      email,
+      primaryLanguage: findLanguage.name,
+      isVerified: true,
+      token,
+    });
   }
 
   static async googleAndFacebookPlusAuth(
     accessToken,
     refreshToken,
     profile,
-    done,
+    done
   ) {
     try {
       const userData = {
@@ -94,7 +98,7 @@ class UserController {
         authtype: profile.provider,
         profileImage: profile.photos[0].value,
         isVerified: true,
-        role: 'standard',
+        role: "standard",
       };
       const [userCreated] = await UserServices.findOrCreateUser(userData);
       done(null, userCreated.dataValues);
@@ -105,13 +109,24 @@ class UserController {
 
   static async authGoogleAndFacebook(req, res) {
     const {
-      firstName, lastName, role, email, isVerified, id, authtype,
+      firstName,
+      lastName,
+      role,
+      email,
+      isVerified,
+      id,
+      authtype,
     } = req.user;
     const token = GenerateToken({
-      firstName, lastName, role, email, isVerified, id,
+      firstName,
+      lastName,
+      role,
+      email,
+      isVerified,
+      id,
     });
     await UserServices.updateUser(req.user.email, { token });
-    let redirectUrl = '';
+    let redirectUrl = "";
     const userToFind = await UserServices.findUserByEmail(req.user.email);
     const userInfo = JSON.stringify({ authtype, token });
     if (userToFind.dataValues.primaryLanguageId === null) {
@@ -137,14 +152,14 @@ class UserController {
     await UserServices.updateUser(req.user.email, { token: null });
     return response.successMessage(
       res,
-      'User is successfully logged out.',
-      200,
+      "User is successfully logged out.",
+      200
     );
   }
 
   static resetPassword(req, res) {
     if (req.body.password !== req.body.confirmPassword) {
-      return response.errorMessage(res, 'Password does not match!', 400);
+      return response.errorMessage(res, "Password does not match!", 400);
     }
 
     const data = {
@@ -158,15 +173,77 @@ class UserController {
 
     if (!req.user.isVerified === true) {
       const status = 401;
-      return response.errorMessage(res, 'User Is Not Verified, Please verify the User First', status);
+      return response.errorMessage(
+        res,
+        "User Is Not Verified, Please verify the User First",
+        status
+      );
     }
     UserServices.updateUser(email, profile);
     return response.successMessage(
       res,
-      'User Profile are Updated',
+      "User Profile are Updated",
       200,
-      profile,
+      profile
     );
+  }
+
+  static async createGuestAccount(req, res) {
+
+    try {
+      const users = await UserServices.countUsers();
+      const { primaryLanguageId } = req.body;
+      const guestNumber = users.count+1;
+      const email = "guest" + guestNumber + "@somafri.com";
+      const isGuest = true;
+      const role = "guest";
+      const token = GenerateToken({
+        role,
+        email,
+        isVerified: true,
+        primaryLanguageId,
+      }); 
+      const data = {
+        email,
+        role,
+        token,
+        primaryLanguageId,
+        isVerified: true,
+        isGuest:true,
+        firstName:'somafriGuest',
+        lastName:guestNumber
+      };
+      await UserServices.CreateUser(data);
+      return response.successMessage(
+        res,
+        "Guest account was created successfully",
+        201,
+        {
+          email,
+          isGuest,
+          role,
+          primaryLanguageId,
+          token,
+        }
+      );
+    } catch (error) {
+      return response.errorMessage(res, error.message, 500);
+    }
+
+  }
+
+  static async removeGuestsAccounts(req, res) {
+    try {     
+      await UserServices.removeGuestsAccounts();
+      return response.successMessage(
+        res,
+        "All guests were deleted successfully",
+        200,
+      );
+    } catch (error) {
+      return response.errorMessage(res, error.message, 500);
+    }
+
   }
 }
 

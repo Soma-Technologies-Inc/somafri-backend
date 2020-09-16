@@ -20,5 +20,7 @@ router.get('/facebook/redirect', passport.authenticate('facebook', { failureRedi
 router.get('/activate/:autorizations', verifyToken.paramToken, userController.updatedUser);
 router.patch('/passWordReset', verifyToken.headerToken, userController.logout);
 router.patch('/logout', verifyToken.headerToken, userController.logout);
+router.post('/guest', userController.createGuestAccount);
+router.delete('/guest', userController.removeGuestsAccounts);
 
 export default router;
