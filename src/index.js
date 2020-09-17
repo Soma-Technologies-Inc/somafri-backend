@@ -55,12 +55,13 @@ server.applyMiddleware({ app, path: '/graphql' });
 const httpServer = http.createServer(app);
 server.installSubscriptionHandlers(httpServer);
 app.use('/soma',routes);
+app.get('/', (req, res) => res.status(200).send({ status: 200, message: 'Welcome to Soma!' }));
 app.use((req, res) => res.status(404).send({
   status: 404,
   error: 'route Not Found!',
 }));
 const port = process.env.PORT || 8000;
-    app.listen({ port }, () => {
+    httpServer.listen({ port }, () => {
       console.log(`Apollo Server on http://localhost:${port}`);
     });
 export default app

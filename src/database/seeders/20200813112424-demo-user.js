@@ -8,7 +8,7 @@ module.exports = {
     email: 'niyeric11@gmail.com',
     password: '$2b$10$ZMLImLFaeSO505IECvzlu.vV1SI7gfrvqvayApc1Ecy4YxVM0axRO',
     token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7ImVtYWlsIjoibml5ZXJpYzExQGdtYWlsLmNvbSIsImZpcnN0TmFtZSI6Ik5peW9uc2VuZ2EiLCJpc1ZlcmlmaWVkIjpmYWxzZX0sImlhdCI6MTU4OTM0NTQ0OCwiZXhwIjoxNTg5NDMxODQ4fQ.EETUfBirSMfUNKRpdHGn7BDzMIaujvCBGXLBEr8UMPE',
-    primaryLanguageId: 2,
+    primaryLanguageId: 1,
     role: 'admin',
     authtype: 'admin',
     createdAt: new Date(),

@@ -118,6 +118,8 @@ export default gql`
   type resetMessage {
     message: String!
   }
-
+  type Subscription {
+    newUser: userInfo!
+  }
 `;
 
