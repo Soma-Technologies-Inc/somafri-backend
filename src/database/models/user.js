@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       gender: { type: DataTypes.STRING, allowNull: true },
       country: { type: DataTypes.STRING, allowNull: true },
       birthdate: { type: DataTypes.STRING, allowNull: true },
+      isGuest: { type: DataTypes.STRING, allowNull: false},
       primaryLanguageId: { type: DataTypes.INTEGER, allowNull: true },
       role: {
         type: DataTypes.STRING,

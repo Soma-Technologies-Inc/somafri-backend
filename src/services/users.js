@@ -4,7 +4,11 @@ import Queries from './Queries';
 
 class UserServices {
   static async CreateUser(NewUser) {
-    return Queries.create(db.user, NewUser);
+    try {
+      const user = await Queries.create(db.user, NewUser);
+    } catch (error) {
+      return error;
+    }
   }
 
   static async findUserByEmail(email) {
@@ -100,7 +104,7 @@ class UserServices {
 
   static async getUsers() {
     try {
-      const searchUsers = await db.user.findAndCountAll({
+      const searchUsers = await db.user.findAndCountAll({  
         attributes: [
           'id',
           'firstName',
@@ -139,6 +143,22 @@ class UserServices {
     } catch (error) {
       return undefined;
     }
+  }
+
+  static async removeGuestsAccounts() {
+    try {
+      const deletedGuests = await db.user.destroy({ where: { isGuest:true } });
+
+      if (!deletedGuests) return null;
+      return user;
+    } catch (error) {
+      return undefined;
+    }
+  }
+
+  static async countUsers(){
+    const users = await db.user.findAndCountAll();
+    return users;
   }
 }
 export default UserServices;
