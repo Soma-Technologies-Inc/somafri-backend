@@ -91,6 +91,7 @@ export default gql`
     token: String!
     primaryLanguageId: Int!
     isVerified: Boolean!
+    isGuest: Boolean!
   }
 
   type loginInfo {
@@ -98,9 +99,10 @@ export default gql`
     firstName: String!
     lastName: String!
     email: String!
-    profileImage: String!
+    profileImage: String
     role: String!
     isVerified: Boolean!
+    isGuest: Boolean!
     primaryLanguageId: String!
     token: String!
   }
