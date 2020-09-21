@@ -14,7 +14,7 @@ class CoursesServices {
         attributes: ['id', 'name', 'rootCourseId'],
         include: [{
           model: db.rootCourse,
-          attributes: ['name', 'courseIcon'],
+          attributes: ['name', 'courseIcon'], 
         }],
         order: [['createdAt', 'ASC']],
       });

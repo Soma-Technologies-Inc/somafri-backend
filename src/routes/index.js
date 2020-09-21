@@ -6,11 +6,16 @@ import videoRoute from './video.routes';
 import translateRoute from './translate.routes';
 import coursesRoute from './courses';
 import contentRoute from './content';
+import countryRoute from './country';
+import languageRouter from './language';
+
 
 const Router = express.Router();
 Router.use('/auth', userRoute);
 Router.use('/courses', coursesRoute);
 Router.use('/music', musicRoute);
+Router.use('/country', countryRoute);
+Router.use('/language', languageRouter);
 Router.use('/video', videoRoute);
 Router.use('/translate', translateRoute);
 Router.use('/content', contentRoute);

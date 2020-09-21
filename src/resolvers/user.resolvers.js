@@ -27,7 +27,15 @@ const UserResolvers = {
       if (user.role !== "admin") {
         throw new ForbiddenError("you are not authorized to perfom this task.");
       }
-      const users = await db.user.findAll();
+      const users = await db.user.findAll({
+        include: [{
+          model: db.language,
+          include: [{
+            model: db.country,
+          }],
+        }],
+      });
+
       return users;
     },
     getUserProfile: async (root, args, context) => {
@@ -121,7 +129,7 @@ const UserResolvers = {
         email,
         primaryLanguageId,
         isVerified: false,
-        isGuest: false,
+  
       });
       const user = await db.user.create({
         firstName,
@@ -130,7 +138,6 @@ const UserResolvers = {
         password: hashedPassword,
         primaryLanguageId,
         isVerified: false,
-        isGuest: false,
         token,
       });
       const emailView = mailer.activateAccountView(token, firstName);
@@ -141,8 +148,8 @@ const UserResolvers = {
         lastName,
         email,
         primaryLanguageId,
+        primaryLanguage:findLanguage,
         isVerified: false,
-        isGuest: false,
         token,
       };
 
@@ -169,7 +176,6 @@ const UserResolvers = {
         email: email,
         role: user.role,
         isVerified: user.isVerified,
-        isGuest: user.isGuest,
       });
       await UserServices.updateUser(email, { token });
       const data = {
@@ -180,8 +186,8 @@ const UserResolvers = {
         profileImage: user.profileImage,
         role: user.role,
         isVerified: user.isVerified,
-        isGuest: user.isGuest,
         primaryLanguageId: user.primaryLanguageId,
+        primaryLanguage:user.language,
         token,
       };
 

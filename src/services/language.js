@@ -12,10 +12,9 @@ class LanguageServices {
   static async getLanguages() {
     try {
       const searchLanguage = await db.language.findAndCountAll({
-        attributes: ['id', 'name', 'countryId', 'duplicatedLanguageId', 'createdAt'],
+        attributes: ['id', 'name', 'countryId', 'duplicatedLanguageId', 'createdAt',  'updatedAt'],
         include: [{
           model: db.country,
-          attributes: ['flag'],
         }],
         order: [['createdAt', 'ASC']],
       });
@@ -44,7 +43,13 @@ class LanguageServices {
 
   static async getLanguage(id) {
     try {
-      const language = await db.language.findOne({ where: { id } });
+      const language = await db.language.findOne({ 
+        
+        where: { id } ,
+        include: [{
+          model: db.country,
+        }],
+      });
       if (!language) return null;
       return language;
     } catch (error) {
@@ -68,10 +73,9 @@ class LanguageServices {
 
   static async findLanguageByCountryId(id) {
     try {
-      return await db.language.findOne({
-        attributes: ['id', 'name', 'createdAt'],
-        order: [['createdAt', 'DESC']],
+      return await db.language.findAll({
         where: { countryId: id },
+        order: [['createdAt', 'ASC']],
       });
     } catch (error) {
       return null;

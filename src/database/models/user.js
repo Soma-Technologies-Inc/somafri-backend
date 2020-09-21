@@ -11,7 +11,6 @@ module.exports = (sequelize, DataTypes) => {
       gender: { type: DataTypes.STRING, allowNull: true },
       country: { type: DataTypes.STRING, allowNull: true },
       birthdate: { type: DataTypes.STRING, allowNull: true },
-      isGuest: { type: DataTypes.STRING, allowNull: false},
       primaryLanguageId: { type: DataTypes.INTEGER, allowNull: true },
       role: {
         type: DataTypes.STRING,
@@ -26,6 +25,13 @@ module.exports = (sequelize, DataTypes) => {
     },
     {},
   );
-  user.associate = () => {};
+  user.associate = function (models) {
+    user.belongsTo(
+      models.language,
+      { foreignKey: 'primaryLanguageId' },
+      { onDelete: 'cascade' },
+      { onUpdate: 'cascade' },
+    );
+  };
   return user;
 };

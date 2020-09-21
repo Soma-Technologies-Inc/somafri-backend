@@ -31,8 +31,8 @@ export default gql`
     levelId: Int
     complexity: Int
     courseIcon: String
-    createdAt: String
-    updatedAt: String
+    createdAt: Date
+    updatedAt: Date
     rootCourse: rootCourse
   }
   type primaryCourse {
