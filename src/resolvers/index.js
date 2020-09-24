@@ -6,6 +6,8 @@ import translationResolver from './translation.resolvers';
 import rootContentResolvers from './content.resolvers'
 import countryResolvers from './country.resolvers'
 import languageResolvers from './language.resolvers'
+import questionResolvers from './question.resolvers'
+import updatesResolvers from './somaUpdates.resolver'
 import { GraphQLDateTime } from 'graphql-iso-date';
 
 
@@ -18,5 +20,7 @@ export default [
   translationResolver,
   rootContentResolvers,
   countryResolvers,
-  languageResolvers
+  languageResolvers,
+  questionResolvers,
+  updatesResolvers
 ];

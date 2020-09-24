@@ -16,6 +16,7 @@ import LanguageHelper from "../helpers/languages.helper";
 import pubsub, { EVENTS } from "../subscriptions";
 import Subscription from "../subscriptions";
 import { subscribe } from "graphql";
+import translate from "../helpers/translate"
 
 const UserResolvers = {
   Query: {
@@ -139,9 +140,13 @@ const UserResolvers = {
         primaryLanguageId,
         isVerified: false,
         token,
-      });
-      const emailView = mailer.activateAccountView(token, firstName);
-      mailer.sendEmail(email, "Verification link", emailView);
+      });             
+      const PrimaryLanguageKey = findLanguage.language_key;
+
+      const translateResults= await translate.translateMail (PrimaryLanguageKey)
+
+      const emailView = mailer.activateAccountView(token, firstName, translateResults);
+      mailer.sendEmail(email, "Somafri Verification link", emailView);
 
       const userInfos = {
         firstName,

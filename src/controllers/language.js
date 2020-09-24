@@ -1,15 +1,16 @@
 import LanguageServices from '../services/language';
-import CoursesServices from '../services/courses';
 import CountryServices from '../services/country';
 import response from '../helpers/response';
-import LanguageHelper from '../helpers/languages.helper';
-import UserServices from '../services/users';
-import verifyToken from '../middlewares/verifyToken';
 
 class LanguageController {
   static async addLanguage(req, res) {
     try {
-      const { name, country, duplicatedLanguageId } = req.body;
+      const { name, country, duplicatedLanguageId,languageKey:language_key } = req.body;
+
+      let learnable = req.body.learnable
+      if (learnable === undefined){
+        learnable= false
+      }
       const findCountry = await CountryServices.findCountry(country);
       if (!findCountry) {
         return response.errorMessage(res, 'Country not registered', 404);
@@ -29,12 +30,16 @@ class LanguageController {
         name,
         countryId: id,
         duplicatedLanguageId,
+        learnable,
+        language_key
       };
       LanguageServices.CreateLanguage(addLanguage);
       const data = {
         name,
         country,
         duplicatedLanguageId,
+        learnable,
+        language_key
       };
       return response.successMessage(
         res,

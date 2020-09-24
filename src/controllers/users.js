@@ -1,10 +1,8 @@
 import environment from "dotenv";
-import checkEmailpassword from "../middlewares/users";
 import UserServices from "../services/users";
 import LanguageServices from "../services/language";
 import EncryptPassword from "../helpers/Encryptor";
 import response from "../helpers/response";
-import mailer from "../helpers/send.email";
 import GenerateToken from "../helpers/token";
 import profileHelper from "../helpers/profile.helper";
 

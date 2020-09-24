@@ -9,6 +9,8 @@ export default gql`
     createdAt: Date
     updatedAt: Date
     country: country
+    learnable: Boolean
+    language_key: String
   }
 
   type learning {
@@ -29,8 +31,13 @@ export default gql`
     user: User
     enrolledLanguage: [learning]
   }
+  type allLanguages {
+    count: Int
+    rows: [language]
+  }
 
   extend type Query {
+    getAllLanguages: allLanguages
     getLanguages: [language]
     getSpecificLanguage(id: Int!): language
     getLanguagesByCountry(countryName: String!): [language]

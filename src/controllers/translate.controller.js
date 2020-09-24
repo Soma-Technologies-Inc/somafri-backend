@@ -1,5 +1,5 @@
 import response from "../helpers/response";
-import axios from "axios";
+import axios from "axios"; 
 import TranslationService from "../services/translation.service";
 
 class Translate {

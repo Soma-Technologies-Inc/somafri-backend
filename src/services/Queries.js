@@ -1,15 +1,15 @@
-import { Op } from 'sequelize';
-import db from '../database/models';
+import { Op } from "sequelize";
+import db from "../database/models";
 /**
  * class for responses
  */
 class Queries {
   /**
- * creating user query
- * @param {string} table users table in database.
- * @param {string} data the data to be inputed in database.
- * @returns {array} data the data to be returned.
- */
+   * creating user query
+   * @param {string} table users table in database.
+   * @param {string} data the data to be inputed in database.
+   * @returns {array} data the data to be returned.
+   */
   static async create(table, data) {
     try {
       const datas = await table.create(data);
@@ -20,11 +20,11 @@ class Queries {
   }
 
   /**
-    * searching a trip
-    * @param {string} table table users table in database.
-    * @param {integer} userId requestUserId user id in database.
-    * @returns {array} data the data to be returned.
-    */
+   * searching a trip
+   * @param {string} table table users table in database.
+   * @param {integer} userId requestUserId user id in database.
+   * @returns {array} data the data to be returned.
+   */
   static async findAllRecord(table, userId) {
     const data = await table.findAll({ where: userId });
     return data;
@@ -41,7 +41,10 @@ class Queries {
   static async findRecordById(table, userId, limit, offset) {
     try {
       const bookUser = await table.findAndCountAll({
-        where: { userId }, order: [['createdAt', 'DESC']], limit, offset,
+        where: { userId },
+        order: [["createdAt", "DESC"]],
+        limit,
+        offset,
       });
       return bookUser;
     } catch (error) {
@@ -109,9 +112,7 @@ class Queries {
   static async getAllLevels(table) {
     try {
       const levels = await table.findAndCountAll({
-        order: [
-          ['id', 'ASC'],
-        ],
+        order: [["id", "ASC"]],
       });
       return levels;
     } catch (error) {
@@ -167,17 +168,34 @@ class Queries {
   }
 
   static async getRootQuestion(table, rootCourseId) {
-    const data = await table.findAll({ where: rootCourseId });
+    const data = await table.findAll({
+      where: { rootCourseId },
+      include: [
+        {
+          model: db.rootCourse,
+        },
+      ],
+    });
     return data;
   }
 
   static async getQuestion(table, questionId) {
-    const data = await table.findAll({ where: questionId });
+    const data = await table.findAll({
+      where: { id: questionId },
+
+      include: [
+        {
+          model: db.rootQuestion,
+        },
+      ],
+    });
     return data;
   }
 
   static async findTestParts(table, primaryLanguageId) {
-    const data = await table.findAll({ where: { languageId: primaryLanguageId } });
+    const data = await table.findAll({
+      where: { languageId: primaryLanguageId },
+    });
     return data;
   }
 

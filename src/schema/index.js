@@ -8,4 +8,6 @@ import TranslationSchema from './translation.schema';
 import contentSchema from './content.schema'
 import countrySchema from './country.schema'
 import languageSchema from './language.schema'
-export default [userSchema,AudioSchema,videoSchema,courseSchema, TranslationSchema,contentSchema,countrySchema,languageSchema];
+import questionSchema from './question.schema'
+import somaUpdates from './somaUpdates.schema'
+export default [userSchema,AudioSchema,videoSchema,courseSchema, TranslationSchema,contentSchema,countrySchema,languageSchema,questionSchema,somaUpdates];

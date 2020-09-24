@@ -2,10 +2,13 @@ import { gql } from "apollo-server-express";
 
 export default gql`
   type rootCourse {
+    id: Int
     name: String
     courseIcon: String
     levelId: Int
     complexity: Int
+    createdAt: Date
+    updatedAt: Date
   }
   type Course {
     name: String!

@@ -25,6 +25,7 @@ export default gql`
   }
   extend type Query {
     getTranslationsByUserId(userId: Int!): [Translations!]!
+    deleteTranslation(id: Int!): String
   }
 
 `;

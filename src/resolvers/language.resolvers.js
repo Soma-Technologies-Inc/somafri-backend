@@ -10,6 +10,18 @@ import {
 
 const languageResolvers = {
   Query: {
+    getAllLanguages: async (root, args, context) => {
+      try {
+          const languages = await LanguageServices.getLanguages();
+          if (languages.count > 0) {
+            return languages;
+          }
+          throw new ForbiddenError("No language registered");
+        
+      } catch (e) {
+        throw new ForbiddenError(`${e.message}`);
+      }
+    },
     getLanguages: async (root, args, context) => {
       const availableLanguage = [];
       try {
@@ -19,9 +31,8 @@ const languageResolvers = {
           await Promise.all(
             languages.rows.map(async (language, index) => {
               if (language.duplicatedLanguageId === null) {
-                const { name } = language;
-
-                if (name !== "English") {
+                const { name, learnable } = language;
+                if (name !== "English" && learnable) {
                   availableLanguage.push(language);
                 }
               }
@@ -38,8 +49,8 @@ const languageResolvers = {
         await Promise.all(
           languages.rows.map(async (language, index) => {
             if (primaryLanguageId !== language.id) {
-              const { name } = language;
-              if (name !== "English") {
+              const { name, learnable } = language;
+              if (name !== "English" && learnable) {
                 availableLanguage.push(language);
               }
             }

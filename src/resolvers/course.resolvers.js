@@ -211,10 +211,7 @@ const CourseResolvers = {
 
       if (user === null) {
         throw new ForbiddenError("Please provide token first");
-      } else if (user.role !== "admin") {
-        throw new ForbiddenError("you are not authorized to perfom this task.");
-      }
-      
+      } 
       try {
         const limit = 10;
         const offset = Paginate(1, limit);

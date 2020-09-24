@@ -12,7 +12,7 @@ class LanguageServices {
   static async getLanguages() {
     try {
       const searchLanguage = await db.language.findAndCountAll({
-        attributes: ['id', 'name', 'countryId', 'duplicatedLanguageId', 'createdAt',  'updatedAt'],
+        attributes: ['id', 'name', 'countryId', 'duplicatedLanguageId','learnable','language_key', 'createdAt',  'updatedAt'],
         include: [{
           model: db.country,
         }],
