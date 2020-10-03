@@ -1,11 +1,7 @@
 import CoursesServices from '../services/courses';
-import LanguageServices from '../services/language';
 import TrackCourse from '../services/trackCourse';
-import rootContentServices from '../services/content.root';
-import ContentServices from '../services/content';
 import response from '../helpers/response';
-import Paginate from '../helpers/paginate';
-import CoursesHelper from '../helpers/courses.helper';
+
 
 class CoursesController {
   static async addTestResult(req, res) {

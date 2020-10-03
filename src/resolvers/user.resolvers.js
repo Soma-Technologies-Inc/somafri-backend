@@ -16,6 +16,7 @@ import LanguageHelper from "../helpers/languages.helper";
 import pubsub, { EVENTS } from "../subscriptions";
 import Subscription from "../subscriptions";
 import { subscribe } from "graphql";
+import translate from "../helpers/translate"
 
 const UserResolvers = {
   Query: {
@@ -27,7 +28,15 @@ const UserResolvers = {
       if (user.role !== "admin") {
         throw new ForbiddenError("you are not authorized to perfom this task.");
       }
-      const users = await db.user.findAll();
+      const users = await db.user.findAll({
+        include: [{
+          model: db.language,
+          include: [{
+            model: db.country,
+          }],
+        }],
+      });
+
       return users;
     },
     getUserProfile: async (root, args, context) => {
@@ -121,7 +130,7 @@ const UserResolvers = {
         email,
         primaryLanguageId,
         isVerified: false,
-        isGuest: false,
+  
       });
       const user = await db.user.create({
         firstName,
@@ -130,19 +139,22 @@ const UserResolvers = {
         password: hashedPassword,
         primaryLanguageId,
         isVerified: false,
-        isGuest: false,
         token,
-      });
-      const emailView = mailer.activateAccountView(token, firstName);
-      mailer.sendEmail(email, "Verification link", emailView);
+      });             
+      const PrimaryLanguageKey = findLanguage.language_key;
+
+      const translateResults= await translate.translateMail (PrimaryLanguageKey)
+
+      const emailView = mailer.activateAccountView(token, firstName, translateResults);
+      mailer.sendEmail(email, "Somafri Verification link", emailView);
 
       const userInfos = {
         firstName,
         lastName,
         email,
         primaryLanguageId,
+        primaryLanguage:findLanguage,
         isVerified: false,
-        isGuest: false,
         token,
       };
 
@@ -169,7 +181,6 @@ const UserResolvers = {
         email: email,
         role: user.role,
         isVerified: user.isVerified,
-        isGuest: user.isGuest,
       });
       await UserServices.updateUser(email, { token });
       const data = {
@@ -180,8 +191,8 @@ const UserResolvers = {
         profileImage: user.profileImage,
         role: user.role,
         isVerified: user.isVerified,
-        isGuest: user.isGuest,
         primaryLanguageId: user.primaryLanguageId,
+        primaryLanguage:user.language,
         token,
       };
 

@@ -24,7 +24,16 @@ class UserServices {
 
   static async getUserProfile(email) {
     try {
-      const user = await db.user.findOne({ where: { email } });
+      const user = await db.user.findOne({ 
+          where: { email },
+          include: [{
+            model: db.language,
+            include: [{
+              model: db.country,
+            }],
+          }], 
+      
+      });
 
       if (!user) return null;
       return user;
@@ -147,7 +156,7 @@ class UserServices {
 
   static async removeGuestsAccounts() {
     try {
-      const deletedGuests = await db.user.destroy({ where: { isGuest:true } });
+      const deletedGuests = await db.user.destroy({ where: { role:guest } });
 
       if (!deletedGuests) return null;
       return user;

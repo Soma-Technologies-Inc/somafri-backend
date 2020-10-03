@@ -1,5 +1,10 @@
 import db from '../database/models';
-class TranslationService{
+import Sequelize from 'sequelize';
+
+const {
+  Op, where, cast, col,
+} = Sequelize;
+class TranslationService{ 
 
       /**
      * creating user query
@@ -15,7 +20,18 @@ class TranslationService{
           return error;
         }
       }
-    
+      static async deleteTranslation(id, userId) {
+        try {
+          return await db.translation.destroy({ 
+            where: {
+          [Op.and]: [{ id }, { userId }],
+
+            },
+          });
+        } catch (error) {
+          return null;
+        }
+      }
       
     
 }

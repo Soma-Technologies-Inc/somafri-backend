@@ -4,6 +4,8 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     countryId: DataTypes.INTEGER,
     duplicatedLanguageId: DataTypes.INTEGER,
+    learnable: DataTypes.BOOLEAN,
+    language_key: DataTypes.STRING,
   }, {});
   language.associate = function (models) {
     language.belongsTo(

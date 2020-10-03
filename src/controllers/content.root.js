@@ -1,7 +1,5 @@
 import RootContentServices from '../services/content.root';
-import CourseServices from '../services/courses';
 import response from '../helpers/response';
-import Paginate from '../helpers/paginate';
 
 class RootContentController {
   static async addContent(req, res) {

@@ -6,8 +6,12 @@ export default gql`
     firstName: String!
     lastName: String!
     email: String!
+    role: String
+    language: Language
     password: String!
     primaryLanguageId: Int!
+    createdAt: Date
+    updatedAt: Date
   }
   
   type Language {
@@ -17,11 +21,13 @@ export default gql`
     totalLevel: Int!
     languageId: Int!
     LanguageName: String
+    name: String
     countryFlag: String
+    country:country
     currentCourseId: String
     currentCourseName: String
-    updatedAt: String
-    createdAt: String
+    updatedAt: Date
+    createdAt: Date
     }
 
   type Profile {
@@ -90,8 +96,8 @@ export default gql`
     email: String!
     token: String!
     primaryLanguageId: Int!
+    primaryLanguage:language
     isVerified: Boolean!
-    isGuest: Boolean!
   }
 
   type loginInfo {
@@ -102,8 +108,8 @@ export default gql`
     profileImage: String
     role: String!
     isVerified: Boolean!
-    isGuest: Boolean!
     primaryLanguageId: String!
+    primaryLanguage:language
     token: String!
   }
 

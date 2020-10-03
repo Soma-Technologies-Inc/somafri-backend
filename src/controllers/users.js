@@ -1,10 +1,8 @@
 import environment from "dotenv";
-import checkEmailpassword from "../middlewares/users";
 import UserServices from "../services/users";
 import LanguageServices from "../services/language";
 import EncryptPassword from "../helpers/Encryptor";
 import response from "../helpers/response";
-import mailer from "../helpers/send.email";
 import GenerateToken from "../helpers/token";
 import profileHelper from "../helpers/profile.helper";
 
@@ -195,7 +193,6 @@ class UserController {
       const { primaryLanguageId } = req.body;
       const guestNumber = users.count+1;
       const email = "guest" + guestNumber + "@somafri.com";
-      const isGuest = true;
       const role = "guest";
       const token = GenerateToken({
         role,
@@ -209,7 +206,6 @@ class UserController {
         token,
         primaryLanguageId,
         isVerified: true,
-        isGuest:true,
         firstName:'somafriGuest',
         lastName:guestNumber
       };
@@ -220,7 +216,6 @@ class UserController {
         201,
         {
           email,
-          isGuest,
           role,
           primaryLanguageId,
           token,
