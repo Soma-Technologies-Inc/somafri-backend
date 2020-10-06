@@ -136,7 +136,20 @@ class CoursesServices {
       return null;
     }
   }
-
+  static async getRootCourses() {
+    try {
+      const rootCourses = await db.rootCourse.findAll({
+        include: [
+          {
+            model: db.language,
+          },
+        ],
+      });
+      return rootCourses;
+    } catch (error) {
+      return error;
+    }
+  }
   static async getCourseName(rootCourseId) {
     return Queries.getCourseName(db.course, rootCourseId);
   }

@@ -8,6 +8,8 @@ import coursesRoute from './courses';
 import contentRoute from './content';
 import countryRoute from './country';
 import languageRouter from './language';
+import addCourseTranslate from './addCourses.routes';
+import addContents from './addContents.routes';
 
 
 const Router = express.Router();
@@ -19,6 +21,8 @@ Router.use('/language', languageRouter);
 Router.use('/video', videoRoute);
 Router.use('/translate', translateRoute);
 Router.use('/content', contentRoute);
+Router.use('/add-courses', addCourseTranslate);
+Router.use('/add-contents', addContents);
 
 
 
