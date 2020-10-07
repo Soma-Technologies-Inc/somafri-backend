@@ -209,12 +209,13 @@ class UserController {
         firstName:'somafriGuest',
         lastName:guestNumber
       };
-      await UserServices.CreateUser(data);
+      const createdUser= await UserServices.CreateUser(data);
       return response.successMessage(
         res,
         "Guest account was created successfully",
         201,
         {
+          id:createdUser.dataValues.id,
           email,
           role,
           primaryLanguageId,

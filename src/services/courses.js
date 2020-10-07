@@ -160,5 +160,21 @@ class CoursesServices {
   static async createCourses(data) {
     return Queries.create(db.course, data);
   }
+
+  static async getRootCourses() {
+    try {
+      const rootCourses = await db.rootCourse.findAll({
+        include: [
+          {
+            model: db.language,
+          },
+        ],
+      });
+      return rootCourses;
+    } catch (error) {
+      return error;
+    }
+  }
+
 }
 export default CoursesServices;
