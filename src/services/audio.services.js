@@ -2,6 +2,7 @@ import { emit } from 'nodemon';
 import db from '../database/models';
 
 class AudioServices {
+
   /**
  * creating user query
  * @param {string} table users table in database.
@@ -15,6 +16,8 @@ static async create( data) {
     } catch (error) {
       return error;
     }
-  }  
+  }
+
+  
 }
 export default AudioServices;
