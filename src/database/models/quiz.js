@@ -1,4 +1,4 @@
-
+'use strict';
 module.exports = (sequelize, DataTypes) => {
   const quiz = sequelize.define(
     'quiz',
@@ -7,14 +7,14 @@ module.exports = (sequelize, DataTypes) => {
       quizContent: DataTypes.TEXT,
       quizAudio: DataTypes.STRING,
     },
-    {},
+    {}
   );
   quiz.associate = function (models) {
     quiz.belongsTo(
       models.content,
       { foreignKey: 'contentId' },
       { onDelete: 'cascade' },
-      { onUpdate: 'cascade' },
+      { onUpdate: 'cascade' }
     );
   };
   return quiz;

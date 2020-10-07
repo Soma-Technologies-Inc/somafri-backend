@@ -6,6 +6,7 @@ class UserServices {
   static async CreateUser(NewUser) {
     try {
       const user = await Queries.create(db.user, NewUser);
+      return user;
     } catch (error) {
       return error;
     }

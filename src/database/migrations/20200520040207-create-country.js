@@ -1,20 +1,19 @@
 'use strict';
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('somaUpdates', {
+  up: (queryInterface, Sequelize) => {
+    return queryInterface.createTable('countries', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      title: {
-        type: Sequelize.TEXT
+      name: {
+        allowNull: false,
+        type: Sequelize.STRING
       },
-      message: {
-        type: Sequelize.TEXT
-      },
-      userEmail: {
+      flag: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       createdAt: {
@@ -27,7 +26,7 @@ module.exports = {
       }
     });
   },
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('somaUpdates');
+  down: (queryInterface, Sequelize) => {
+    return queryInterface.dropTable('countries');
   }
 };

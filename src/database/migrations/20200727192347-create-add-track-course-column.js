@@ -3,20 +3,16 @@ const metadata = (Sequelize) => ({
   onDelete: 'CASCADE',
   onUpdate: 'CASCADE',
   allowNull: true,
-  references: {
-    model: "languages",
-    key: "id",
-  },
-  defaultValue: 1,
+  defaultValue: null, 
 });
 
 module.exports = {
   up: (queryInterface, Sequelize) => queryInterface.sequelize.transaction((transaction) => Promise.all([
-    queryInterface.addColumn('users', 'primaryLanguageId', metadata(Sequelize), { transaction }),
+    queryInterface.addColumn('trackCourses', 'testResult', metadata(Sequelize), { transaction }),
   ])),
 
   down: (queryInterface, Sequelize) => queryInterface.sequelize.transaction((transaction) => Promise.all([
-    queryInterface.removeColumn('users', 'primaryLanguageId', { transaction }),
+    queryInterface.removeColumn('trackCourses', 'testResult', { transaction }),
 
   ])),
 };

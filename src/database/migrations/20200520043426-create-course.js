@@ -1,27 +1,34 @@
 
 module.exports = {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('quizzes', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('courses', {
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: Sequelize.INTEGER,
     },
-    contentId: {
+    name: {
+      type: Sequelize.STRING,
+    },
+    languageId: {
       type: Sequelize.INTEGER,
       allowNull: false,
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE',
       references: {
-        model: 'contents',
+        model: 'languages',
         key: 'id',
       },
     },
-    quizContent: {
-      type: Sequelize.TEXT,
-    },
-    quizAudio: {
-      type: Sequelize.STRING,
+    rootCourseId: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
+      references: {
+        model: 'rootCourses',
+        key: 'id',
+      },
     },
     createdAt: {
       allowNull: false,
@@ -32,5 +39,5 @@ module.exports = {
       type: Sequelize.DATE,
     },
   }),
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('quizzes'),
+  down: (queryInterface, Sequelize) => queryInterface.dropTable('courses'),
 };

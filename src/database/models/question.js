@@ -1,12 +1,12 @@
-
+'use strict';
 module.exports = (sequelize, DataTypes) => {
   const question = sequelize.define('question', {
     languageId: DataTypes.INTEGER,
     rootQuestionId: DataTypes.INTEGER,
     firstPart: DataTypes.STRING,
-    secondPart: DataTypes.STRING,
+    secondPart: DataTypes.STRING
   }, {});
-  question.associate = function (models) {
+  question.associate = function(models) {
     question.belongsTo(
       models.language,
       { foreignKey: 'languageId' },

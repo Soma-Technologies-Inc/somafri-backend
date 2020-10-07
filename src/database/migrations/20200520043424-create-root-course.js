@@ -1,11 +1,14 @@
 
 module.exports = {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('questions', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('rootCourses', {
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: Sequelize.INTEGER,
+    },
+    name: {
+      type: Sequelize.STRING,
     },
     languageId: {
       type: Sequelize.INTEGER,
@@ -17,20 +20,20 @@ module.exports = {
         key: 'id',
       },
     },
-    rootQuestionId: {
+    levelId: {
       type: Sequelize.INTEGER,
       allowNull: false,
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE',
       references: {
-        model: 'rootQuestions',
+        model: 'levels',
         key: 'id',
       },
     },
-    firstPart: {
-      type: Sequelize.STRING,
+    complexity: {
+      type: Sequelize.INTEGER,
     },
-    secondPart: {
+    courseIcon: {
       type: Sequelize.STRING,
     },
     createdAt: {
@@ -42,5 +45,5 @@ module.exports = {
       type: Sequelize.DATE,
     },
   }),
-  down: (queryInterface, Sequelize) => queryInterface.dropTable('questions'),
+  down: (queryInterface, Sequelize) => queryInterface.dropTable('rootCourses'),
 };

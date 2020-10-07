@@ -2,16 +2,14 @@
 module.exports = {
   up: (queryInterface, Sequelize) => queryInterface.bulkInsert('languages', [
     {
-      name: 'Kinyarwanda',
-      countryId: 2,
-      language_key: 'rw',
+      name: 'English',
+      countryId: 1,
       createdAt: new Date(),
       updatedAt: new Date(),
     },
     {
-      name: 'English',
-      countryId: 1,
-      language_key: 'en',
+      name: 'Kinyarwanda',
+      countryId: 2,
       createdAt: new Date(),
       updatedAt: new Date(),
     },

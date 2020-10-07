@@ -1,4 +1,5 @@
 
+
 module.exports = (sequelize, DataTypes) => {
   const rootQuestion = sequelize.define('rootQuestion', {
     rootCourseId: DataTypes.INTEGER,
