@@ -17,6 +17,8 @@ import loaders from './loaders';
 import verifyTokens from './helpers/verify.token';
 import routes from './routes/index';
 
+import db from "./database/models";
+
 
 const app = express();
 
@@ -44,7 +46,8 @@ const server = new ApolloServer({
       };
     }
     const token = req.headers.auth || '';
-    const user = verifyTokens.verifyAllTokens(token);
+    const userData = await verifyTokens.verifyAllTokens(token);
+    const user = await db.user.findOne({ where: { email:userData.email } });
     return { user };
 
   },
