@@ -47,8 +47,10 @@ const server = new ApolloServer({
     }
     const token = req.headers.auth || '';
     const userData = await verifyTokens.verifyAllTokens(token);
-    const user = await db.user.findOne({ where: { email:userData.email } });
-    return { user };
+    if (userData){
+      const user = await db.user.findOne({ where: { email:userData.email } });
+      return { user };
+    }
 
   },
 });
