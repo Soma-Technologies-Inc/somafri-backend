@@ -21,6 +21,7 @@ const TransaltionResolvers = {
       TranslationHistory.map((history,index)=>{
         data.push(
           {
+            translationId:TranslationHistory[index].dataValues.id,
             BeforeTranslation: {
               language: TranslationHistory[index].dataValues.from,
               text: TranslationHistory[index].dataValues.question,
@@ -34,6 +35,10 @@ const TransaltionResolvers = {
       })
 
       return data;
+    },
+    getTranslations: async (root, args, context) => {
+      const Translations = await db.translation.findAll();
+      return Translations;
     },
     deleteTranslation: async (root, { id }, context, args) => {
       const user = await context.user;

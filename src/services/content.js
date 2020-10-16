@@ -41,6 +41,17 @@ class ContentServices {
       return null;
     }
   }
+  static async findContentsByrootAndLanguge(rootContentId, languageId) {
+    try {
+      return await db.content.findAll({
+        where: {
+          [Op.and]: [{ languageId }, { rootContentId }],
+        },
+      });
+    } catch (error) {
+      return null;
+    }
+  }
 
   static async findContentById(id) {
     try {

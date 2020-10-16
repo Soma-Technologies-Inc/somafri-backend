@@ -130,7 +130,6 @@ const UserResolvers = {
         email,
         primaryLanguageId,
         isVerified: false,
-  
       });
       const user = await db.user.create({
         firstName,
@@ -149,6 +148,7 @@ const UserResolvers = {
       mailer.sendEmail(email, "Somafri Verification link", emailView);
 
       const userInfos = {
+        id:user.id,
         firstName,
         lastName,
         email,
