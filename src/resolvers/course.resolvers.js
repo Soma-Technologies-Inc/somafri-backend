@@ -31,7 +31,35 @@ const CourseResolvers = {
       if (!courses) {
         throw new ForbiddenError("No courses on this languages");
       }
-      return courses;
+
+      let courseList = [];
+      let totalContents = 0;
+      await Promise.all(
+        courses.map(async (course, index) => {
+          const { rootCourseId } = course;
+          const getRootContents = await ContentServices.findRootContents(
+            rootCourseId
+          );
+          await Promise.all(
+            getRootContents.map(async (rootContent, index) => {
+              const { id } = await rootContent;
+              const getContents = await ContentServices.findContentsByrootAndLanguge(
+                id,
+                languageId
+              );
+              if (getContents.length > 0) {
+                totalContents = totalContents + 1;
+              }
+            })
+          );
+          const courseAndContent = {
+            ...course.dataValues,
+            totalContents,
+          };
+          courseList.push(courseAndContent);
+        })
+      );
+      return courseList;
     },
     getCoursesByLevel: async (root, { levelId }, context, args) => {
       const user = await context.user;
@@ -148,11 +176,10 @@ const CourseResolvers = {
           languageId
         );
 
-        
         if (languageCourse) {
           await Promise.all(
             languageCourse.map(async (course1, index) => {
-              const { id, rootCourseId } = course1
+              const { id, rootCourseId } = course1;
               const primaryCourse = CoursesServices.getCoursesByLanguageAndRoot(
                 primaryLanguageId,
                 rootCourseId
@@ -211,26 +238,26 @@ const CourseResolvers = {
 
       if (user === null) {
         throw new ForbiddenError("Please provide token first");
-      } 
+      }
       try {
         const limit = 10;
         const offset = Paginate(1, limit);
         const findCourse = await CoursesServices.getCoursesByLanguage(
           languageId,
           courseId
+        );
+        if (findCourse) {
+          const { rootCourseId } = findCourse;
+          const findRootContents = await rootContentServices.findContentByField(
+            limit,
+            offset,
+            "rootCourseId",
+            rootCourseId
           );
-          if (findCourse) {
-            const { rootCourseId } = findCourse;
-            const findRootContents = await rootContentServices.findContentByField(
-              limit,
-              offset,
-              "rootCourseId",
-              rootCourseId
-              );
-              const contentData = [];
-              let a = -1;
-              await Promise.all(
-                findRootContents.map(async (course1, index) => {
+          const contentData = [];
+          let a = -1;
+          await Promise.all(
+            findRootContents.map(async (course1, index) => {
               const { id } = course1;
               const courseContent = await ContentServices.findContentByRootIdAndByLanguage(
                 id,
@@ -285,9 +312,9 @@ const CourseResolvers = {
             offset,
             "rootCourseId",
             rootCourseId
-            );
-            const contentData = [];
-            let a = -1;
+          );
+          const contentData = [];
+          let a = -1;
           await Promise.all(
             findRootContents.rows.map(async () => {
               const { id } = findRootContents.rows[(a += 1)].dataValues;
@@ -430,10 +457,7 @@ const CourseResolvers = {
         const recentCourses = [];
         await Promise.all(
           getRecentCourses.rows.map(async (course1, index) => {
-            if (
-              course1.currentChapter <
-              course1.totalChapter
-            ) {
+            if (course1.currentChapter < course1.totalChapter) {
               recentCourses.push(course1);
             }
           })

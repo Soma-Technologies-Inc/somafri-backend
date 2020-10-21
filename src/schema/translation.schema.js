@@ -2,7 +2,7 @@ import { gql } from 'apollo-server-express';
 
 export default gql`
   type Translation {
-    ID: Int!
+    id: Int!
     question: String!
     answer: String!
     from: String!
@@ -11,6 +11,7 @@ export default gql`
   }
 
   type Translations {
+    translationId: Int
     BeforeTranslation:BeforeTranslation!
     AfterTranslation:AfterTranslation!
   }
@@ -25,6 +26,7 @@ export default gql`
   }
   extend type Query {
     getTranslationsByUserId(userId: Int!): [Translations!]!
+    getTranslations: [Translation]
     deleteTranslation(id: Int!): String
   }
 

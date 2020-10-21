@@ -17,9 +17,10 @@ class Translate {
         to:to.name,
         userId,
       };
-      await TranslationService.create(data);
+     const saveTranslate= await TranslationService.create(data);
       const responseData = [
         {
+          translationId:saveTranslate.id,
           BeforeTranslation: {
             language: from.name,
             text: message,

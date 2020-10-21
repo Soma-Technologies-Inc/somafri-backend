@@ -25,6 +25,7 @@ export default gql`
     name: String!
     rootCourseId: Int!
     rootCourse: rootCourse!
+    totalContents: Int
   }
   type languageCourse {
     id: Int!

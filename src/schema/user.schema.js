@@ -91,6 +91,7 @@ export default gql`
   }
 
   type userInfo {
+    id:Int!
     firstName: String!
     lastName: String!
     email: String!
