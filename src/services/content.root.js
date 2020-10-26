@@ -45,7 +45,7 @@ class RootContentServices {
 
   static async findContentByField(limit, offset, key, value) {
     try {
-      return await db.rootContent.findAll({
+      return await db.rootContent.findAndCountAll({
         attributes: [
           'id',
           'rootCourseId',
