@@ -241,6 +241,24 @@ class UserController {
     }
 
   }
+  static async appleAuth(req, res) {
+
+    console.log("===========>> apple auth entered");
+// res.status(200).send({ status: 200, message: req.body }) 
+
+    try {     
+    console.log("===========>>", req.body.id_token);
+    // window.location = "/Android";
+    res.redirect('intent://callback');
+    // res.send("intent://#Intent;com.somatechnology.somafri;scheme=mycoolapp;launchFlags=268435456;end;"); 
+    // WebAuthenticationOptions.redirectUri(`intent://callback?token=${req.body.id_token}`);
+    // return res.redirect(`intent://callback?token=${req.body.id_token}`);
+    // intent://callback?${ firstName : result.givenName, lastName : result.familyName }#Intent;package=com.somatechnology.somafri;scheme=signinwithapple;
+    } catch (error) {
+      return response.errorMessage(res, error.message, 500);
+    }
+
+  }
 }
 
 export default UserController;

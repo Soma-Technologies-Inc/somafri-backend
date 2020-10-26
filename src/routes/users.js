@@ -22,5 +22,6 @@ router.patch('/passWordReset', verifyToken.headerToken, userController.logout);
 router.patch('/logout', verifyToken.headerToken, userController.logout);
 router.post('/guest', userController.createGuestAccount);
 router.delete('/guest', userController.removeGuestsAccounts);
+router.post('/apple', userController.appleAuth);
 
 export default router;
