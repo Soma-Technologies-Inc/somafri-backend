@@ -1,12 +1,10 @@
 import db from "../database/models";
-import { combineResolvers, skip } from "graphql-resolvers";
 import {
   ForbiddenError,
   UserInputError,
   AuthenticationError,
 } from "apollo-server";
 import GenerateToken from "../helpers/token";
-import { isAuthenticated, isAdmin } from "../middlewares/auth";
 import EncryptPassword from "../helpers/Encryptor";
 import LanguageServices from "../services/language";
 import UserServices from "../services/users";
@@ -14,9 +12,7 @@ import comparePassword from "../helpers/Decryptor";
 import mailer from "../helpers/send.email";
 import LanguageHelper from "../helpers/languages.helper";
 import pubsub, { EVENTS } from "../subscriptions";
-import Subscription from "../subscriptions";
-import { subscribe } from "graphql";
-import translate from "../helpers/translate"
+import translate from "../helpers/translate";
 
 const UserResolvers = {
   Query: {
@@ -29,12 +25,16 @@ const UserResolvers = {
         throw new ForbiddenError("you are not authorized to perfom this task.");
       }
       const users = await db.user.findAll({
-        include: [{
-          model: db.language,
-          include: [{
-            model: db.country,
-          }],
-        }],
+        include: [
+          {
+            model: db.language,
+            include: [
+              {
+                model: db.country,
+              },
+            ],
+          },
+        ],
       });
 
       return users;
@@ -139,21 +139,27 @@ const UserResolvers = {
         primaryLanguageId,
         isVerified: false,
         token,
-      });             
+      });
       const PrimaryLanguageKey = findLanguage.language_key;
 
-      const translateResults= await translate.translateMail (PrimaryLanguageKey)
+      const translateResults = await translate.translateMail(
+        PrimaryLanguageKey
+      );
 
-      const emailView = mailer.activateAccountView(token, firstName, translateResults);
+      const emailView = mailer.activateAccountView(
+        token,
+        firstName,
+        translateResults
+      );
       mailer.sendEmail(email, "Somafri Verification link", emailView);
 
       const userInfos = {
-        id:user.id,
+        id: user.id,
         firstName,
         lastName,
         email,
         primaryLanguageId,
-        primaryLanguage:findLanguage,
+        primaryLanguage: findLanguage,
         isVerified: false,
         token,
       };
@@ -172,6 +178,10 @@ const UserResolvers = {
 
       if (!comparePassword(password, user.password)) {
         throw new AuthenticationError("Email or password does not match");
+      }
+
+      if (!user.status) {
+        throw new ForbiddenError("your account has been suspended please contact the system administrator");
       }
       const token = GenerateToken({
         id: user.id,
@@ -192,7 +202,7 @@ const UserResolvers = {
         role: user.role,
         isVerified: user.isVerified,
         primaryLanguageId: user.primaryLanguageId,
-        primaryLanguage:user.language,
+        primaryLanguage: user.language,
         token,
       };
 

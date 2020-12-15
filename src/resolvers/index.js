@@ -8,6 +8,7 @@ import countryResolvers from './country.resolvers'
 import languageResolvers from './language.resolvers'
 import questionResolvers from './question.resolvers'
 import updatesResolvers from './somaUpdates.resolver'
+import dashboardUser from './dashboard/dashboard.user.resolvers'
 import { GraphQLDateTime } from 'graphql-iso-date';
 
 
@@ -22,5 +23,6 @@ export default [
   countryResolvers,
   languageResolvers,
   questionResolvers,
-  updatesResolvers
+  updatesResolvers,
+  dashboardUser
 ];
