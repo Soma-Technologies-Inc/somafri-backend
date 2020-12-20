@@ -6,10 +6,13 @@ export default gql`
     firstName: String!
     lastName: String!
     email: String!
+    isVerified: Boolean
     role: String
     language: Language
     password: String!
+    profileImage: String
     primaryLanguageId: Int!
+    token: String
     createdAt: Date
     updatedAt: Date
   }
@@ -23,6 +26,7 @@ export default gql`
     LanguageName: String
     name: String
     countryFlag: String
+    language_key: String
     country:country
     currentCourseId: String
     currentCourseName: String
