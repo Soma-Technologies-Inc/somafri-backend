@@ -33,6 +33,29 @@ const dashboardUserResolvers = {
         throw new ForbiddenError(`${e.message}`);
       }
     },
+
+    getUserInfos: async (root, { userEmail:email }, context, args) => {
+
+      try {
+        const user = await context.user;
+        if (!user) {
+          throw new AuthenticationError("Please provide token first");
+        }
+        if (user.role !== "admin") {
+          throw new ForbiddenError(
+            "you are not authorized to perform this task."
+          );
+        }
+        const userInfo = await UserServices.getUserProfile(email);
+        if (userInfo) {
+          return userInfo;
+        }
+        throw new ForbiddenError("user Not found");
+      } catch (e) {
+        throw new ForbiddenError(`${e.message}`);
+      }
+    },
+
     activateDeactivate: async (root, { userId:id }, context, args) => {
       try {
         const user = await context.user;
