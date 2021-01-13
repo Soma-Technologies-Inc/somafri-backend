@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.com/Soma-Technologies-Inc/somafri-backend.svg?token=cNf26y1EKxG3L7Umsa86&branch=develop)](https://travis-ci.com/Soma-Technologies-Inc/somafri-backend)
+[![Maintainability](https://api.codeclimate.com/v1/badges/643b5e910019c0e7019f/maintainability)](https://codeclimate.com/repos/5ffe766fe2fdb7014d002e7c/maintainability)
 
 # Somafri
 Somafri is a mobile and web application that helps  to learn African and foreign languages through free courses, local movies, and music.
