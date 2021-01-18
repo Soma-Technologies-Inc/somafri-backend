@@ -11,15 +11,15 @@ class Validate {
 				.isLength({ min: 3 }),
 			check(
 				'email',
-				'Invalid email address, example: example@gmail.com.',
+				'Invalid email address, example: example@gmail.com.'
 			).isEmail(),
 			check(
 				'password',
-				'Password should be provided and must be alphanumeric with atleast 8 charactors.',
+				'Password should be provided and must be alphanumeric with atleast 8 charactors.'
 			).isLength({ min: 8 }),
 			check(
 				'primaryLanguageId',
-				'primaryLanguageId should be valide',
+				'primaryLanguageId should be valide'
 			).isNumeric(),
 		];
 	}
@@ -28,11 +28,11 @@ class Validate {
 		return [
 			check(
 				'email',
-				'Invalid email address, example: example@gmail.com.',
+				'Invalid email address, example: example@gmail.com.'
 			).isEmail(),
 			check(
 				'password',
-				'Invalid password, your password should be alphanumeric with atleast 8 charactors.',
+				'Invalid password, your password should be alphanumeric with atleast 8 charactors.'
 			).isLength({ min: 8 }),
 		];
 	}
@@ -41,17 +41,14 @@ class Validate {
 		return [
 			check(
 				'email',
-				'Invalid email address, example: example@gmail.com.',
+				'Invalid email address, example: example@gmail.com.'
 			).isEmail(),
 		];
 	}
 
 	static userRole() {
 		return [
-			check(
-				'role',
-				'Invalid User Role.',
-			).isString().isLength({ min: 2 }),
+			check('role', 'Invalid User Role.').isString().isLength({ min: 2 }),
 		];
 	}
 
@@ -60,7 +57,7 @@ class Validate {
 			check('name', 'name should be valid.').isString().isLength({ min: 2 }),
 			check(
 				'email',
-				'Invalid email address, example: example@gmail.com.',
+				'Invalid email address, example: example@gmail.com.'
 			).isEmail(),
 			check('message', 'message must be provided.')
 				.isString()
@@ -93,7 +90,6 @@ class Validate {
 			check('rootCourseId', 'Invalid rootCourseId').isNumeric(),
 			check('chapter', 'chapter must be a valid chapter number').isNumeric(),
 			check('content', 'content must be provided').isLength({ min: 1 }),
-
 		];
 	}
 
@@ -105,15 +101,11 @@ class Validate {
 	}
 
 	static music() {
-		return [
-			check('music', 'music link is required').isLength({ min: 1 }),
-		];
+		return [check('music', 'music link is required').isLength({ min: 1 })];
 	}
 
 	static video() {
-		return [
-			check('video', 'video link is required').isLength({ min: 1 }),
-		];
+		return [check('video', 'video link is required').isLength({ min: 1 })];
 	}
 
 	static dailyWord() {
@@ -125,6 +117,28 @@ class Validate {
 	static getDailyWord() {
 		return [
 			check('languageKey', 'languageKey is required').isLength({ min: 1 }),
+		];
+	}
+
+	static career() {
+		return [
+			check('department', 'department is invalid.')
+				.isString()
+				.isLength({ min: 3 })
+				.notEmpty(),
+			check('jobTitle', 'jobTitle is invalid.')
+				.isString()
+				.isLength({ min: 3 })
+				.notEmpty(),
+			check('location', 'location should be a valid location.')
+				.isString()
+				.isLength({ min: 3 })
+				.not()
+				.isEmpty(),
+			check('jobLink', 'jobLink is invalid!')
+				.isString()
+				.isLength({ min: 3 })
+				.notEmpty(),
 		];
 	}
 }
