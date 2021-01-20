@@ -5,8 +5,8 @@
 * @returns {Object} return offset
 */
 const Paginate = (page, limit) => {
-  const verifiedPage = (!Number(page) || page <= 1) ? 1 : page;
-  const offset = limit * (verifiedPage - 1);
-  return offset;
+	const verifiedPage = (!Number(page) || page <= 1) ? 1 : page;
+	const offset = limit * (verifiedPage - 1);
+	return offset;
 };
 export default Paginate;

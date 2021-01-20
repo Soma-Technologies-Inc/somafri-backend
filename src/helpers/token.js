@@ -6,10 +6,10 @@ import jwt from 'jsonwebtoken';
 * @returns {Object} return jwt token
 */
 const GenerateToken = (payload) => {
-  const token = jwt.sign({
-    payload
-  }, process.env.JWTKEY,);
-  
-  return token;
+	const token = jwt.sign({
+		payload
+	}, process.env.JWTKEY,);
+
+	return token;
 };
 export default GenerateToken;

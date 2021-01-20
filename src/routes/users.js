@@ -2,7 +2,6 @@ import express from 'express';
 import passport from 'passport';
 import userController from '../controllers/users';
 import Validate from '../helpers/validate';
-import isEmailUsed from '../middlewares/auth';
 import isValid from '../middlewares/validate';
 import verifyToken from '../middlewares/verifyToken';
 import verifyAdmin from '../middlewares/verify.admin';
@@ -11,6 +10,8 @@ import '../config/passport.config';
 
 const router = express.Router();
 
+router.post('/signup', Validate.signup(), isValid, userController.signup);
+router.post('/signin', Validate.signin(), isValid, userController.signIn);
 router.post('/social-signup-mobile', userController.googleAndFacebookMobileSignUp);
 router.post('/social-signin-mobile', userController.googleAndFacebookMobileSignIn);
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));

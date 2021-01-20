@@ -4,6 +4,6 @@ import ContentsController from '../controllers/content';
 
 const router = express.Router();
 
-router.post('/',verifyToken.headerToken,ContentsController.addContentsFromTranslate);
+router.post('/', verifyToken.headerToken, ContentsController.addContentsFromTranslate);
 
 export default router;

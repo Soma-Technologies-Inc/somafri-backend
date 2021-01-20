@@ -1,4 +1,3 @@
-
 import express from 'express';
 import userRoute from './users';
 import musicRoute from './musics.routes';
@@ -11,8 +10,6 @@ import languageRouter from './language';
 import addCourseTranslate from './addCourses.routes';
 import addContents from './addContents.routes';
 
-
-
 const Router = express.Router();
 Router.use('/auth', userRoute);
 Router.use('/courses', coursesRoute);
@@ -24,8 +21,5 @@ Router.use('/translate', translateRoute);
 Router.use('/content', contentRoute);
 Router.use('/add-courses', addCourseTranslate);
 Router.use('/add-contents', addContents);
-
-
-
 
 export default Router;
