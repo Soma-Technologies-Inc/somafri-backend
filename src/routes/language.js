@@ -9,8 +9,8 @@ import LanguageMiddleware from '../middlewares/languages.middleware';
 const router = express.Router();
 
 router.post('/', verifyToken.headerToken, verifyAdmin, [
-  Validate.language(),
-  isValid,
-  LanguageController.addLanguage,
+	Validate.language(),
+	isValid,
+	LanguageController.addLanguage,
 ]);
 export default router;

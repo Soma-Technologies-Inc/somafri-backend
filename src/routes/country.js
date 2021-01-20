@@ -9,10 +9,10 @@ import uploadImages from '../middlewares/uploadImages';
 const router = express.Router();
 
 router.post('/', verifyToken.headerToken, verifyAdmin, [
-  uploadImages.single('flag'),
-  Validate.country(),
-  isValid,
-  CountryController.addCountry,
+	uploadImages.single('flag'),
+	Validate.country(),
+	isValid,
+	CountryController.addCountry,
 ]);
 
 export default router;

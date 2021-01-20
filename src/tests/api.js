@@ -1,11 +1,10 @@
 import axios from 'axios';
 
 const API_URL = 'http://localhost:10000/graphql';
-export const me = async token =>
-  await axios.post(
-    API_URL,
-    {
-      query: `
+export const me = async token => await axios.post(
+	API_URL,
+	{
+		query: `
         {
           me {
             id
@@ -14,19 +13,18 @@ export const me = async token =>
           }
         }
       `,
-    },
-    token
-      ? {
-          headers: {
-            'auth': token,
-          },
-        }
-      : null,
-  );
+	},
+	token
+		? {
+			headers: {
+				auth: token,
+			},
+		}
+		: null,
+);
 
-export const createUser = async variables =>
-  axios.post(API_URL, {
-    query: `
+export const createUser = async variables => axios.post(API_URL, {
+	query: `
       mutation(
         $email: String!
         $firstName: String!
@@ -44,7 +42,5 @@ export const createUser = async variables =>
         }
       }
     `,
-    variables,
-  });
-
-
+	variables,
+});
