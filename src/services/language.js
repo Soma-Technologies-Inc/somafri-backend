@@ -71,6 +71,20 @@ class LanguageServices {
 		}
 	}
 
+	static async findLanguageByKey(languageKey) {
+		try {
+			return await db.language.findOne({
+				where: { language_key: languageKey },
+				include: [{
+					model: db.country,
+					attributes: ['flag'],
+				}],
+			});
+		} catch (error) {
+			return null;
+		}
+	}
+
 	static async findLanguageByCountryId(id) {
 		try {
 			return await db.language.findAll({

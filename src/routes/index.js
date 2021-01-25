@@ -9,6 +9,7 @@ import countryRoute from './country';
 import languageRouter from './language';
 import addCourseTranslate from './addCourses.routes';
 import addContents from './addContents.routes';
+import dailyWord from './dailyWord';
 
 const Router = express.Router();
 Router.use('/auth', userRoute);
@@ -21,5 +22,6 @@ Router.use('/translate', translateRoute);
 Router.use('/content', contentRoute);
 Router.use('/add-courses', addCourseTranslate);
 Router.use('/add-contents', addContents);
+Router.use('/dailyWord', dailyWord);
 
 export default Router;
