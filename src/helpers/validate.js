@@ -115,6 +115,18 @@ class Validate {
 			check('video', 'video link is required').isLength({ min: 1 }),
 		];
 	}
+
+	static dailyWord() {
+		return [
+			check('text', 'Notification text is required').isLength({ min: 1 }),
+		];
+	}
+
+	static getDailyWord() {
+		return [
+			check('languageKey', 'languageKey is required').isLength({ min: 1 }),
+		];
+	}
 }
 
 export default Validate;
