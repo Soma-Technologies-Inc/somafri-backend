@@ -10,6 +10,7 @@ import languageRouter from './language';
 import addCourseTranslate from './addCourses.routes';
 import addContents from './addContents.routes';
 import dailyWord from './dailyWord';
+import careerRoute from './career.routes';
 
 const Router = express.Router();
 Router.use('/auth', userRoute);
@@ -23,5 +24,6 @@ Router.use('/content', contentRoute);
 Router.use('/add-courses', addCourseTranslate);
 Router.use('/add-contents', addContents);
 Router.use('/dailyWord', dailyWord);
+Router.use('/career', careerRoute);
 
 export default Router;

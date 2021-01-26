@@ -72,6 +72,7 @@
   "devDependencies": {
     "apollo-server": "^2.2.3",
     "apollo-server-express": "^2.2.3",
+    "bcrypt": "^3.0.8",
     "chai": "^4.2.0",
     "cors": "^2.8.5",
     "dataloader": "^1.4.0",
