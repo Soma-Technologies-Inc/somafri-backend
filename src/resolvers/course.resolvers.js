@@ -234,7 +234,7 @@ const CourseResolvers = {
 			args
 		) => {
 			const user = await context.user;
-
+			
 			if (user === null) {
 				throw new ForbiddenError('Please provide token first');
 			}
@@ -244,24 +244,27 @@ const CourseResolvers = {
 				const findCourse = await CoursesServices.getCoursesByLanguage(
 					languageId,
 					courseId
-				);
-				if (findCourse) {
-					const { rootCourseId } = findCourse;
+					);
+					if (findCourse) {
+						const { rootCourseId } = findCourse;
 					const findRootContents = await rootContentServices.findContentByField(
 						limit,
 						offset,
 						'rootCourseId',
 						rootCourseId
 					);
+					
 					const contentData = [];
+					const rootContentData = [];
 					const a = -1;
 					await Promise.all(
-						findRootContents.map(async (course1, index) => {
-							const { id } = course1;
+						findRootContents.rows.map(async (course1, index) => {
+							rootContentData.push(course1.dataValues);
+							const { id } = course1.dataValues;
 							const courseContent = await ContentServices.findContentByRootIdAndByLanguage(
 								id,
 								languageId
-							);
+								);
 							if (courseContent) {
 								contentData.push(await courseContent.dataValues);
 							} else {
@@ -273,7 +276,7 @@ const CourseResolvers = {
 						})
 					);
 					const data = {
-						rootContent: findRootContents,
+						rootContent: rootContentData,
 						contentData,
 					};
 					return data;
