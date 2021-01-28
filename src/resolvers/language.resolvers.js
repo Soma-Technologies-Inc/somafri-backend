@@ -124,7 +124,6 @@ const languageResolvers = {
 				if (getLanguage === null) {
 					throw new UserInputError('The language doesnt exist');
 				}
-
 				const { id: languageId } = getLanguage;
 				const checkIfEnrolled = await LanguageServices.checkIfUserAlreadyEnrolled(
 					languageId,
@@ -145,13 +144,18 @@ const languageResolvers = {
 					currentLevel,
 					totalLevel,
 					countryFlag,
+					currentCourseId: getLanguageCourses.rows[0].dataValues.id,
+					currentCourseName: getLanguageCourses.rows[0].dataValues.name,
 				};
 				const enrolledLanguage = await LanguageServices.enrollToLanguage(data);
+
 				const responseData = {
 					id: enrolledLanguage.id,
 					userId,
 					currentLevel,
+					languageId,
 					totalLevel,
+					LanguageName:findLanguage.name,
 					enrolledLanguage: findLanguage.name,
 					countryFlag,
 					updatedAt: enrolledLanguage.updatedAt,

@@ -86,6 +86,7 @@ export default gql`
     primaryLanguageContents: primaryLanguageContents
   }
   type courseContents {
+    currentChapter: Int
     rootContent: [rootContent]
     contentData: [contentData]
   }
@@ -114,6 +115,7 @@ export default gql`
     getCoursesByLevel(levelId: Int!): [course!]!
     getLanguageCourses(languageId: Int!): [languageCourses!]!
     getCourseContents(languageId: Int!, courseId: Int!): courseContents!
+    getUserLearningCourseContents(languageId: Int!, courseId: Int!): courseContents!
     getUserCourseContents(
       languageId: Int!
       courseId: Int!

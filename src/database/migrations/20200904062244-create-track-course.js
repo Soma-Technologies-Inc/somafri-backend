@@ -42,6 +42,9 @@ module.exports = {
 		courseComplexity: {
 			type: Sequelize.INTEGER,
 		},
+		testResult: {
+			type: Sequelize.INTEGER,
+		},
 		levelCourses: {
 			type: Sequelize.INTEGER,
 		},
