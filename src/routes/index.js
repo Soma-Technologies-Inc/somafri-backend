@@ -14,6 +14,7 @@ import dailyWord from './dailyWord';
 import careerRoute from './career.routes';
 import surveyRoute from './survey.routes';
 import userProfileRoute from './userProfile';
+import questionRoute from './questions';
 
 const Router = express.Router();
 Router.use('/auth', userRoute);
@@ -31,5 +32,6 @@ Router.use('/add-contents', addContents);
 Router.use('/dailyWord', dailyWord);
 Router.use('/career', careerRoute);
 Router.use('/survey', surveyRoute);
+Router.use('/questions', questionRoute);
 
 export default Router;

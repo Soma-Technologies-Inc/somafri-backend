@@ -40,7 +40,6 @@ class QuestionHelper {
 				languageId,
 				courseId,
 			);
-
 			if (LearningLanguageCourse) {
 				const { rootCourseId } = LearningLanguageCourse;
 				const findRootContents = await rootContentServices.findContentFields(
@@ -56,10 +55,12 @@ class QuestionHelper {
 							rootContentId,
 							languageId,
 						);
-						contentData.push(
-							rootContent.dataValues,
-						);
-						learningData.push(learningLanguageContents.dataValues);
+						if (learningLanguageContents) {
+							contentData.push(
+								rootContent.dataValues,
+							);
+							learningData.push(learningLanguageContents.dataValues);
+						}
 					}),
 				);
 
