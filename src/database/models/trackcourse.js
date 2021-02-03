@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
 		translatedCourseName: DataTypes.STRING,
 		currentChapter: DataTypes.INTEGER,
 		totalChapter: DataTypes.INTEGER,
-		testResult: DataTypes.INTEGER,
+		// testResult: DataTypes.INTEGER,
 
 	}, {});
 	trackCourses.associate = function (models) {
