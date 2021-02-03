@@ -8,6 +8,7 @@ import profileHelper from '../helpers/profile.helper';
 import mailer from '../helpers/send.email';
 import translate from '../helpers/translate';
 import checkEmailpassword from '../middlewares/users';
+import LanguageHelper from '../helpers/languages.helper';
 
 environment.config();
 class UserController {
@@ -240,6 +241,60 @@ class UserController {
 			password: EncryptPassword(req.body.password),
 		};
 		UserServices.resetPassword(req, res, req.user.email, data);
+	}
+
+	static async getUserProfile(req, res) {
+		try {
+			const { email } = req.user;
+			const userId = req.user.id;
+			const { primaryLanguageId } = req.user;
+			const languagesResponse = [];
+			const enrolledLanguage = await LanguageServices.getEnrolledLanguages(userId);
+			await Promise.all(enrolledLanguage.map(async (language, index) => {
+				const {
+					languageId, id, currentLevel, totalLevel,
+					countryFlag, updatedAt, createdAt, currentCourseId, currentCourseName,
+				} = language.dataValues;
+				const findLanguage = await LanguageHelper.getLanguageName(languageId);
+
+				const LanguageName = findLanguage.name;
+				languagesResponse.push({
+					id,
+					userId,
+					currentLevel,
+					totalLevel,
+					languageId,
+					LanguageName,
+					countryFlag,
+					currentCourseId,
+					currentCourseName,
+					updatedAt,
+					createdAt,
+				});
+			}));
+			const primaryLanguageName = await LanguageHelper.getLanguageName(primaryLanguageId);
+			const user = await UserServices.findUserByEmail(email);
+			const userData = {
+				id: user.dataValues.id,
+				firstName: user.dataValues.firstName,
+				lastName: user.dataValues.lastName,
+				email: user.dataValues.email,
+				profileImage: user.dataValues.profileImage,
+				gender: user.dataValues.gender,
+				country: user.dataValues.country,
+				birthdate: user.dataValues.birthdate,
+				primaryLanguageId: primaryLanguageName.dataValues.name,
+				Language: languagesResponse,
+
+			};
+			if (user) {
+				return response.successMessage(res, 'user retrieved successfully', 200, userData);
+			}
+
+			return response.errorMessage(res, 'No User Found', 404);
+		} catch (error) {
+			return response.errorMessage(res, error.message, 500);
+		}
 	}
 
 	static async editUserProfile(req, res) {

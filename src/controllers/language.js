@@ -1,6 +1,8 @@
 import LanguageServices from '../services/language';
 import CountryServices from '../services/country';
+import CoursesServices from '../services/courses';
 import response from '../helpers/response';
+import LanguageHelper from '../helpers/languages.helper';
 
 class LanguageController {
 	static async addLanguage(req, res) {
@@ -18,8 +20,8 @@ class LanguageController {
 			const { id } = findCountry;
 			const findLanguage = await LanguageServices.findLanguage(name);
 			if (duplicatedLanguageId !== undefined) {
-				const findLanguage = await LanguageServices.getLanguage(duplicatedLanguageId);
-				if (findLanguage === null) {
+				const findLanguages = await LanguageServices.getLanguage(duplicatedLanguageId);
+				if (findLanguages === null) {
 					return response.errorMessage(res, 'duplication language does not exist not registered', 404);
 				}
 			}
@@ -47,6 +49,153 @@ class LanguageController {
 				200,
 				data,
 				duplicatedLanguageId,
+			);
+		} catch (e) {
+			return response.errorMessage(res, e.message, 500);
+		}
+	}
+
+	static async getLanguages(req, res) {
+		try {
+			const availableLanguage = [];
+			if (req.headers.token !== undefined) {
+				const token = req.headers.token.split(' ')[1];
+				const user = await LanguageHelper.verifyToken(req, res, token);
+				const languages = await LanguageServices.getLanguages();
+				const { primaryLanguageId } = user.dataValues;
+				await Promise.all(
+					languages.rows.map(async (course1, index) => {
+						if (primaryLanguageId !== languages.rows[index].dataValues.id) {
+							const { name } = languages.rows[index].dataValues;							
+							if (name !== 'English') {
+								availableLanguage.push(languages.rows[index].dataValues);
+							}
+						}
+					}),
+				);
+				if (languages.count > 0) {
+					return response.successMessage(
+						res,
+						'List of countries',
+						200,
+						availableLanguage,
+					);
+				}
+				return response.errorMessage(res, 'No language registered', 404);
+			}
+
+			const languages = await LanguageServices.getLanguages();
+			await Promise.all(
+				languages.rows.map(async (course1, index) => {
+					if (languages.rows[index].dataValues.duplicatedLanguageId === null) {
+						const { name } = languages.rows[index].dataValues;
+
+						if (name !== 'English') {
+							availableLanguage.push(languages.rows[index].dataValues);
+						}
+					}
+				}),
+			);
+			if (languages.count > 0) {
+				return response.successMessage(
+					res,
+					'List of countries',
+					200,
+					availableLanguage,
+				);
+			}
+			return response.errorMessage(res, 'No language registered', 404);
+		} catch (e) {
+			return response.errorMessage(res, e.message, 500);
+		}
+	}
+
+	static async enrollToLanguage(req, res) {
+		try {
+			const userId = req.user.id;
+			const languageId = req.language.id;
+			const countryFlag = req.language.country.dataValues.flag;
+			const currentLevel = 1;
+			const findLanguage = await LanguageServices.getLanguage(languageId);
+			const getLanguageCourses = await CoursesServices.getCourses(languageId);
+			const totalLevel = getLanguageCourses.count;
+			const data = {
+				userId,
+				languageId,
+				currentLevel,
+				totalLevel,
+				countryFlag,
+			};
+			const enrolledLanguage = await LanguageServices.enrollToLanguage(data);
+			const responseData = {
+				id: enrolledLanguage.dataValues.id,
+				userId,
+				currentLevel,
+				totalLevel,
+				enrolledLanguage: findLanguage.name,
+				countryFlag,
+				updatedAt: enrolledLanguage.dataValues.updatedAt,
+				createdAt: enrolledLanguage.dataValues.createdAt,
+				currentCourseId: enrolledLanguage.dataValues.currentCourseId,
+				currentCourseName: enrolledLanguage.dataValues.currentCourseName,
+			};
+			return response.successMessage(
+				res,
+				'You have enrolled to this language successfully',
+				201,
+				responseData,
+			);
+		} catch (e) {
+			return response.errorMessage(res, e.message, 500);
+		}
+	}
+
+	static async getEnrolledLanguages(req, res) {
+		try {
+			const userId = req.user.id;
+			const languagesResponse = [];
+
+			const enrolledLanguage = await LanguageServices.getEnrolledLanguages(
+				userId,
+			);
+			await Promise.all(
+				enrolledLanguage.map(async (language, index) => {
+					const {
+						languageId,
+						id,
+						currentLevel,
+						totalLevel,
+						countryFlag,
+						updatedAt,
+						createdAt,
+						currentCourseId,
+						currentCourseName,
+					} = language.dataValues;
+					const findLanguage = await LanguageHelper.getLanguageName(languageId);
+					const LanguageName = findLanguage.name;
+					languagesResponse.push({
+						id,
+						userId,
+						currentLevel,
+						totalLevel,
+						languageId,
+						LanguageName,
+						countryFlag,
+						currentCourseId,
+						currentCourseName,
+						updatedAt,
+						createdAt,
+					});
+				}),
+			);
+			if (languagesResponse.length <= 0) {
+				return response.errorMessage(res, 'you did not unllored to any language', 404);
+			}
+			return response.successMessage(
+				res,
+				'Enrolled languages',
+				200,
+				languagesResponse,
 			);
 		} catch (e) {
 			return response.errorMessage(res, e.message, 500);
