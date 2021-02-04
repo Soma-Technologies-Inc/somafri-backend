@@ -133,12 +133,14 @@ class QuestionController {
 							}
 						}
 					});
+
 					const answers = shuffler(alt);
 					const response1 = {
 						firstPart,
 						secondPart,
 						question: {
 							questionName: userCourseContents.learningData[index].content,
+							questionAudio: userCourseContents.learningData[index].contentAudio,
 							rootContentId: userCourseContents.learningData[index].rootContentId,
 						},
 						answers,
