@@ -16,4 +16,14 @@ router.post('/', verifyToken.headerToken, verifyAdmin, [
 ]);
 router.post('/add-language', verifyToken.headerToken, LanguageMiddleware.checkIfLanguageExist, LanguageMiddleware.checkIfUserAlreadyEnrolled, LanguageController.enrollToLanguage);
 
+router.get('/country/:countryName', verifyToken.headerToken, [
+	LanguageController.getLanguagesByCountry,
+]);
+
+router.get('/users-learningLanguages', verifyToken.headerToken, verifyAdmin, LanguageController.getUsersLearningLanguages);
+
+router.get('/:id', verifyToken.headerToken, [
+	LanguageController.singleLanguage,
+]);
+
 export default router;

@@ -15,11 +15,12 @@ import careerRoute from './career.routes';
 import surveyRoute from './survey.routes';
 import userProfileRoute from './userProfile';
 import questionRoute from './questions';
+import testRoute from './result';
 
 const Router = express.Router();
 Router.use('/auth', userRoute);
 Router.use('/profile', userProfileRoute);
-Router.use('/courses', coursesRoute);
+Router.use('/courses', coursesRoute, testRoute);
 Router.use('/music', musicRoute);
 Router.use('/country', countryRoute);
 Router.use('/language', languageRouter);
