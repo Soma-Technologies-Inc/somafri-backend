@@ -12,7 +12,7 @@ router.post('/', verifyToken.headerToken, verifyAdmin, [
 	isValid,
 	DailyWordController.addDailyWord,
 ]);
-router.get('/unread', verifyToken.headerToken, [
+router.get('/unread/:languageKey', verifyToken.headerToken, [
 	DailyWordController.getUnreadDailyWord,
 ]);
 

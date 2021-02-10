@@ -30,9 +30,11 @@ class dailyWord {
 
 	static async getUnreadDailyWord(req, res) {
 		try {
-			const { id: userId } = req.user;
+			const { id: userId, primaryLanguageId } = req.user;
+			const { languageKey } = req.params;
 			const dailyWordsList = await DailyWord.getDailyWords();
 			const unreadDailyWord = [];
+			const unreadTranslated = [];
 			await Promise.all(
 				dailyWordsList.map(async (Word) => {
 					const { id } = Word;
@@ -48,11 +50,40 @@ class dailyWord {
 			if (unreadDailyWord.length <= 0) {
 				return response.errorMessage(res, 'no new Daily Word found', 404);
 			}
+
+			await Promise.all(
+				unreadDailyWord.map(async (Word) => {
+					const getPrimaryLanguage = await LanguageServices.getLanguage(primaryLanguageId);
+					const primaryTranslatedWord = await axios.get(
+						`https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${getPrimaryLanguage.language_key}&dt=t&q=${Word.text}`
+					);
+					const translatedWord = await axios.get(
+						`https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${languageKey}&dt=t&q= ${Word.text}`
+					);
+					const getLanguageTranslateName = await LanguageServices.findLanguageByKey(languageKey);
+					let languageTranslateName;
+					if (getLanguageTranslateName) {
+						languageTranslateName = getLanguageTranslateName.name;
+					} else {
+						languageTranslateName = 'english';
+					}
+					const translatedResponse = {
+						primaryLanguageName: getPrimaryLanguage.name,
+						primaryLanguage: primaryTranslatedWord.data[0][0][0],
+						languageTranslateName,
+						languageTranslate: translatedWord.data[0][0][0]
+					};
+					unreadTranslated.push(translatedResponse);
+				})
+			);
+			if (unreadTranslated.length <= 0) {
+				return response.errorMessage(res, 'no Daily Word found', 404);
+			}
 			return response.successMessage(
 				res,
 				'List of unread Daily Words',
 				200,
-				unreadDailyWord
+				unreadTranslated
 			);
 		} catch (e) {
 			return response.errorMessage(res, e.message, 500);
