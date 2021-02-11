@@ -145,6 +145,17 @@ class Queries {
 		}
 	}
 
+	static async getLanguageUsers(table, languageId) {
+		try {
+			const response = await table.findAndCountAll({
+				where: { languageId },
+			});
+			return response;
+		} catch (error) {
+			return error;
+		}
+	}
+
 	static async checkIfRootCourseExist(table, rootCourseId) {
 		try {
 			const response = await table.findOne({

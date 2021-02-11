@@ -5,7 +5,6 @@ import response from '../helpers/response';
 import LanguageHelper from '../helpers/languages.helper';
 import UserServices from '../services/users';
 
-
 class LanguageController {
 	static async addLanguage(req, res) {
 		try {
@@ -174,14 +173,14 @@ class LanguageController {
 						currentCourseName,
 					} = language.dataValues;
 					const findLanguage = await LanguageHelper.getLanguageName(languageId);
-					const LanguageName = findLanguage.name;
 					languagesResponse.push({
 						id,
 						userId,
 						currentLevel,
 						totalLevel,
 						languageId,
-						LanguageName,
+						LanguageName: findLanguage.name,
+						LanguageKey: findLanguage.language_key,
 						countryFlag,
 						currentCourseId,
 						currentCourseName,
@@ -191,7 +190,7 @@ class LanguageController {
 				}),
 			);
 			if (languagesResponse.length <= 0) {
-				return response.errorMessage(res, 'you did not unllored to any language', 404);
+				return response.errorMessage(res, 'you did not enroll to any language', 404);
 			}
 			return response.successMessage(
 				res,
@@ -282,6 +281,45 @@ class LanguageController {
 				'user Enrolled languages',
 				200,
 				userLearningLanguages,
+			);
+		} catch (e) {
+			return response.errorMessage(res, e.message, 500);
+		}
+	}
+
+	static async topLanguage(req, res) {
+		try {
+			const languages = await LanguageServices.getLanguages();
+			const languageUsers = [];
+			await Promise.all(
+				languages.rows.map(async (language) => {
+					const { id } = language;
+					const usersByLanguage = await LanguageServices.getLanguageUsers(id);
+					languageUsers.push({
+						languageId: language.id,
+						languageName: language.name,
+						usersLearning: usersByLanguage.count,
+						languageKey: language.language_key,
+						country: language.country
+
+					});
+				}),
+			);
+
+			const topLanguages = languageUsers.sort(
+				(a, b) => parseFloat(b.usersLearning) - parseFloat(a.usersLearning));
+			if (languageUsers.length > 0) {
+				return response.successMessage(
+					res,
+					'Top learnable languages',
+					200,
+					topLanguages,
+				);
+			}
+			return response.errorMessage(
+				res,
+				'No language found',
+				404,
 			);
 		} catch (e) {
 			return response.errorMessage(res, e.message, 500);

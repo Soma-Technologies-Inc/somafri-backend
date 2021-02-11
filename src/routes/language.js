@@ -22,6 +22,10 @@ router.get('/country/:countryName', verifyToken.headerToken, [
 
 router.get('/users-learningLanguages', verifyToken.headerToken, verifyAdmin, LanguageController.getUsersLearningLanguages);
 
+router.get('/top', verifyToken.headerToken, [
+	LanguageController.topLanguage,
+]);
+
 router.get('/:id', verifyToken.headerToken, [
 	LanguageController.singleLanguage,
 ]);

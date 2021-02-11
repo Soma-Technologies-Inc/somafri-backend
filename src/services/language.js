@@ -124,5 +124,9 @@ class LanguageServices {
 	static async getAllLevels() {
 		return Queries.getAllLevels(db.level);
 	}
+
+	static async getLanguageUsers(languageId) {
+		return Queries.getLanguageUsers(db.learning, languageId);
+	}
 }
 export default LanguageServices;
