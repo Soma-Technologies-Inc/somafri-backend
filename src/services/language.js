@@ -117,12 +117,20 @@ class LanguageServices {
 		return Queries.getEnrolledLanguages(db.learning, userId);
 	}
 
+	static async getMyEnrolledLanguages(userId) {
+		return Queries.getMyEnrolledLanguages(db.learning, userId);
+	}
+
 	static async checkIfUserAlreadyEnrolled(languageId, userId) {
 		return Queries.checkIfUserAlreadyEnrolled(db.learning, languageId, userId);
 	}
 
 	static async getAllLevels() {
 		return Queries.getAllLevels(db.level);
+	}
+
+	static async getLanguageUsers(languageId) {
+		return Queries.getLanguageUsers(db.learning, languageId);
 	}
 }
 export default LanguageServices;
