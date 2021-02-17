@@ -22,7 +22,7 @@ router.get('/country/:countryName', verifyToken.headerToken, [
 
 router.get('/users-learningLanguages', verifyToken.headerToken, verifyAdmin, LanguageController.getUsersLearningLanguages);
 
-router.get('/top', verifyToken.headerToken, [
+router.get('/top', [
 	LanguageController.topLanguage,
 ]);
 

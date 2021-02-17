@@ -159,6 +159,7 @@ class LanguageController {
 			const enrolledLanguage = await LanguageServices.getEnrolledLanguages(
 				userId,
 			);
+
 			await Promise.all(
 				enrolledLanguage.map(async (language, index) => {
 					const {

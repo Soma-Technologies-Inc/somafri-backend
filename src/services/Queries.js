@@ -145,6 +145,20 @@ class Queries {
 		}
 	}
 
+	static async getMyEnrolledLanguages(table, userId) {
+		try {
+			const EnrolledLanguage = await table.findAll({ where: { userId },
+				include: [
+					{
+						model: db.language,
+					},
+				], });
+			return EnrolledLanguage;
+		} catch (error) {
+			return error;
+		}
+	}
+
 	static async getLanguageUsers(table, languageId) {
 		try {
 			const response = await table.findAndCountAll({
