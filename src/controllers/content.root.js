@@ -23,14 +23,16 @@ class RootContentController {
 			if (ContentExistence) {
 				return response.errorMessage(res, 'content already registered', 409);
 			}
-			RootContentServices.CreateContent(req.body);
+			const addContent = await RootContentServices.CreateContent(req.body);
 			const data = {
+				id: addContent.id,
 				rootCourseId,
 				chapter,
 				content,
 				contentImage,
 				contentAudio,
 			};
+
 			return response.successMessage(
 				res,
 				'Course saved successfully',

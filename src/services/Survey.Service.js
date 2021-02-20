@@ -1,4 +1,4 @@
-import models from "../database/models";
+import models from '../database/models';
 
 const { Survey } = models;
 
@@ -19,9 +19,7 @@ class SurveyService {
    */
   static getAllSurvey = (survey) => Survey.findAll({ where: survey });
 
-  static findSurveyByAttribute = (attribute) => {
-    return Survey.findOne({ where: attribute });
-  };
+  static findSurveyByAttribute = (attribute) => Survey.findOne({ where: attribute });
 }
 
 export default SurveyService;

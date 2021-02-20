@@ -234,7 +234,7 @@ const CourseResolvers = {
 			args
 		) => {
 			const user = await context.user;
-			
+
 			if (user === null) {
 				throw new ForbiddenError('Please provide token first');
 			}
@@ -244,16 +244,16 @@ const CourseResolvers = {
 				const findCourse = await CoursesServices.getCoursesByLanguage(
 					languageId,
 					courseId
-					);
-					if (findCourse) {
-						const { rootCourseId } = findCourse;
+				);
+				if (findCourse) {
+					const { rootCourseId } = findCourse;
 					const findRootContents = await rootContentServices.findContentByField(
 						limit,
 						offset,
 						'rootCourseId',
 						rootCourseId
 					);
-					
+
 					const contentData = [];
 					const rootContentData = [];
 					const a = -1;
@@ -264,7 +264,7 @@ const CourseResolvers = {
 							const courseContent = await ContentServices.findContentByRootIdAndByLanguage(
 								id,
 								languageId
-								);
+							);
 							if (courseContent) {
 								contentData.push(await courseContent.dataValues);
 							} else {
@@ -296,7 +296,7 @@ const CourseResolvers = {
 			if (user === null || user === undefined) {
 				throw new ForbiddenError('Please provide token first');
 			}
-			const {primaryLanguageId} = user.dataValues;
+			const { primaryLanguageId } = user.dataValues;
 			const userId = user.id;
 			try {
 				const limit = 10;
@@ -304,45 +304,44 @@ const CourseResolvers = {
 				const findCourse = await CoursesServices.getCoursesByLanguage(
 					languageId,
 					courseId
+				);
+				if (findCourse) {
+					const { rootCourseId } = findCourse;
+					const findRootContents = await rootContentServices.findContentByField(
+						limit,
+						offset,
+						'rootCourseId',
+						rootCourseId
 					);
-					if (findCourse) {
-						const { rootCourseId } = findCourse;
-						const findRootContents = await rootContentServices.findContentByField(
-							limit,
-							offset,
-							'rootCourseId',
-							rootCourseId
+					const contentData = [];
+					const rootContentData = [];
+					const a = -1;
+
+					await Promise.all(
+						findRootContents.rows.map(async (course1, index) => {
+							const { id } = course1.dataValues;
+							const primaryLanguageContent = await ContentServices.findContentByRootIdAndByLanguage(
+								id,
+								primaryLanguageId
 							);
-							const contentData = [];
-							const rootContentData = [];
-							const a = -1;
+							const primaryLanguageData = {
+								rootCourseId: course1.dataValues.rootCourseId,
+								chapter: course1.dataValues.chapter,
+								content: primaryLanguageContent.dataValues.content,
+								contentImage: course1.dataValues.contentImage,
+								contentAudio: primaryLanguageContent.dataValues.contentAudio,
 
-							await Promise.all(
-								findRootContents.rows.map(async (course1, index) => {
-									
-									const { id } = course1.dataValues;
-									const primaryLanguageContent = await ContentServices.findContentByRootIdAndByLanguage(
-										id,
-										primaryLanguageId
-										);
-										const primaryLanguageData={
-											rootCourseId:course1.dataValues.rootCourseId ,
-											chapter:course1.dataValues.chapter,
-											content: primaryLanguageContent.dataValues.content,
-											contentImage:course1.dataValues.contentImage,
-											contentAudio: primaryLanguageContent.dataValues.contentAudio,
+							};
+							if (primaryLanguageContent) {
+								rootContentData.push(await primaryLanguageData);
+							} else {
+								rootContentData.push(course1.dataValues);
+							}
 
-										}
-										if (primaryLanguageContent) {
-											rootContentData.push(await primaryLanguageData);
-										} else {
-											rootContentData.push(course1.dataValues);
-										}
-									
 							const courseContent = await ContentServices.findContentByRootIdAndByLanguage(
 								id,
 								languageId
-								);
+							);
 							if (courseContent) {
 								contentData.push(await courseContent.dataValues);
 							} else {
@@ -351,13 +350,13 @@ const CourseResolvers = {
 									contentAudio: 'no audio yet',
 								});
 							}
-						}) 
+						})
 					);
 
 					const courseProgress = await TrackCourse.findCourseByLanguageId(userId, languageId, courseId);
 
 					const data = {
-						currentChapter:courseProgress.dataValues.currentChapter,
+						currentChapter: courseProgress.dataValues.currentChapter,
 						rootContent: rootContentData,
 						contentData,
 					};

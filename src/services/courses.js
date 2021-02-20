@@ -31,7 +31,7 @@ class CoursesServices {
 				where: {
 					[Op.and]: [{ id }, { languageId }],
 				},
-				
+
 			});
 		} catch (error) {
 			return null;

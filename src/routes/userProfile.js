@@ -8,4 +8,3 @@ router.get('/get-profile', verifyToken.headerToken, userController.getUserProfil
 router.patch('/edit-profile', verifyToken.headerToken, userController.editUserProfile);
 
 export default router;
-  
