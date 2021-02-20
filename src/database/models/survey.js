@@ -11,25 +11,25 @@ module.exports = (sequelize, DataTypes) => {
      */
 		static associate(models) {
 			Survey.belongsTo(
-        models.user,
-        { foreignKey: "userId" },
-        { onDelete: "cascade" },
-        { onUpdate: "cascade" }
-      );
+				models.user,
+				{ foreignKey: 'userId' },
+				{ onDelete: 'cascade' },
+				{ onUpdate: 'cascade' }
+			);
 		}
 	}
 	Survey.init(
-    {
-      userId: DataTypes.INTEGER,
-      dailyGoal: DataTypes.STRING,
-      whereUserHeardUs: DataTypes.STRING,
-      purposeOfLearning: DataTypes.STRING,
-      submitted: { type: DataTypes.BOOLEAN, allowNull: true, defaultValue: true },
-    },
-    {
-      sequelize,
-      modelName: "Survey",
-    }
-  );
+		{
+			userId: DataTypes.INTEGER,
+			dailyGoal: DataTypes.STRING,
+			whereUserHeardUs: DataTypes.STRING,
+			purposeOfLearning: DataTypes.STRING,
+			submitted: { type: DataTypes.BOOLEAN, allowNull: true, defaultValue: true },
+		},
+		{
+			sequelize,
+			modelName: 'Survey',
+		}
+	);
 	return Survey;
 };

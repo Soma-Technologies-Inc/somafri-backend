@@ -7,7 +7,6 @@ import Paginate from '../helpers/paginate';
 import LanguageServices from '../services/language';
 import CoursesHelper from '../helpers/courses.helper';
 
-
 class CoursesController {
 	static async addTestResult(req, res) {
 		const userId = req.user.id;

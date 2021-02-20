@@ -144,23 +144,23 @@ class Validate {
 
 	static survey() {
 		return [
-      check("dailyGoal", "dailyGoal is invalid.")
-        .isString()
-        .isLength({ min: 3 })
-        .notEmpty(),
-      check("whereUserHeardUs", "whereUserHeardUs is invalid.")
-        .isString()
-        .isLength({ min: 3 })
-        .notEmpty(),
-      check(
-        "purposeOfLearning",
-        "purposeOfLearning should be a valid."
-      )
-        .isString()
-        .isLength({ min: 3 })
-        .not()
-        .isEmpty(),
-    ];
+			check('dailyGoal', 'dailyGoal is invalid.')
+				.isString()
+				.isLength({ min: 3 })
+				.notEmpty(),
+			check('whereUserHeardUs', 'whereUserHeardUs is invalid.')
+				.isString()
+				.isLength({ min: 3 })
+				.notEmpty(),
+			check(
+				'purposeOfLearning',
+				'purposeOfLearning should be a valid.'
+			)
+				.isString()
+				.isLength({ min: 3 })
+				.not()
+				.isEmpty(),
+		];
 	}
 }
 

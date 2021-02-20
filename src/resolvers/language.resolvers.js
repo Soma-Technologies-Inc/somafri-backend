@@ -155,7 +155,7 @@ const languageResolvers = {
 					currentLevel,
 					languageId,
 					totalLevel,
-					LanguageName:findLanguage.name,
+					LanguageName: findLanguage.name,
 					enrolledLanguage: findLanguage.name,
 					countryFlag,
 					updatedAt: enrolledLanguage.updatedAt,

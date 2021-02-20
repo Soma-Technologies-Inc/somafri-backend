@@ -50,12 +50,12 @@ class ContentsController {
 					content: req.body.content,
 					contentAudio: baseLanguageContent.dataValues.contentAudio,
 				};
-				await ContentServices.CreateContent(data);
+				const addContent = await ContentServices.CreateContent(data);
 				return response.successMessage(
 					res,
 					'Content saved successfully',
 					200,
-					data,
+					{ id: addContent.id, ...data },
 				);
 			}
 
@@ -104,12 +104,12 @@ class ContentsController {
 				content: req.body.content,
 				contentAudio: req.file.location,
 			};
-			ContentServices.CreateContent(data);
+			const addContent = await ContentServices.CreateContent(data);
 			return response.successMessage(
 				res,
 				'Content saved successfully',
 				200,
-				data,
+				{ id: addContent.id, ...data },
 			);
 		} catch (e) {
 			return response.errorMessage(res, e.message, 500);

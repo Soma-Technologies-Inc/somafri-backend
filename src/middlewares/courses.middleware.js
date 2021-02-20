@@ -29,7 +29,7 @@ class CoursesMiddleware {
 			rootCourseId,
 		);
 		if (rootCourse === null) {
-			return response.errorMessage(res, 'The root course doesnt exist', 404);
+			return response.errorMessage(res, 'The root course does not exist', 404);
 		}
 		return next();
 	}
