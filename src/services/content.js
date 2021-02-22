@@ -95,7 +95,8 @@ class ContentServices {
 
 	static async findContentByRootIdAndByLanguage(rootContentId, languageId) {
 		try {
-			return await db.content.findOne({
+			
+			const data =await db.content.findOne({
 				attributes: [
 					'id',
 					'rootContentId',
@@ -108,6 +109,7 @@ class ContentServices {
 				},
 				order: [['rootContentId', 'ASC']],
 			});
+			return data;
 		} catch (error) {
 			return null;
 		}

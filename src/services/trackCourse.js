@@ -25,11 +25,13 @@ class TrackCourse {
 
 	static async findCourseByLanguageId(userId, languageId, courseId) {
 		try {
-			return await db.trackCourses.findOne({
+			const data= await db.trackCourses.findOne({
 				where: {
 					[Op.and]: [{ userId }, { languageId }, { courseId }],
 				},
 			});
+			
+			return data;
 		} catch (error) {
 			return error;
 		}
