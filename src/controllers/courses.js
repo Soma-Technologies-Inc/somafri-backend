@@ -56,6 +56,20 @@ class CoursesController {
 		}
 	}
 
+	static async getRootCourses(req, res) {
+		try {
+			const rootCourses = await CoursesServices.getRootCourses();
+			return response.successMessage(
+				res,
+				'root course created successfully',
+				201,
+				rootCourses,
+			);
+		} catch (e) {
+			return response.errorMessage(res, e.message, 500);
+		}
+	}
+
 	static async createCourses(req, res) {
 		try {
 			const { name, languageId, rootCourseId } = req.body;
