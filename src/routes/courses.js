@@ -12,5 +12,6 @@ router.post('/add-courses', verifyToken.headerToken, verifyAdmin, courseMiddlewa
 router.get('/recent', verifyToken.headerToken, CoursesController.recentCourses);
 router.get('/language-courses/:languageId', verifyToken.headerToken, CoursesController.getLanguageCourses);
 router.get('/learn-language/:languageId/:courseId', verifyToken.headerToken, CoursesController.getLearnContents);
+router.get('/contents/:languageId/:courseId', verifyToken.headerToken, verifyAdmin, CoursesController.getCourseContents);
 
 export default router;
