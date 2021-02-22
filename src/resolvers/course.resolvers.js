@@ -305,6 +305,7 @@ const CourseResolvers = {
 					languageId,
 					courseId
 				);
+
 				if (findCourse) {
 					const { rootCourseId } = findCourse;
 					const findRootContents = await rootContentServices.findContentByField(
@@ -313,6 +314,7 @@ const CourseResolvers = {
 						'rootCourseId',
 						rootCourseId
 					);
+
 					const contentData = [];
 					const rootContentData = [];
 					const a = -1;
@@ -324,7 +326,9 @@ const CourseResolvers = {
 								id,
 								primaryLanguageId
 							);
+							console.log('=-=-=-=-=-==-=', primaryLanguageContent);
 							const primaryLanguageData = {
+								id:primaryLanguageContent.dataValues.id,
 								rootCourseId: course1.dataValues.rootCourseId,
 								chapter: course1.dataValues.chapter,
 								content: primaryLanguageContent.dataValues.content,
@@ -332,7 +336,7 @@ const CourseResolvers = {
 								contentAudio: primaryLanguageContent.dataValues.contentAudio,
 
 							};
-							if (primaryLanguageContent) {
+							if (primaryLanguageContent!==null) {
 								rootContentData.push(await primaryLanguageData);
 							} else {
 								rootContentData.push(course1.dataValues);
@@ -342,7 +346,7 @@ const CourseResolvers = {
 								id,
 								languageId
 							);
-							if (courseContent) {
+							if (courseContent!==null) {
 								contentData.push(await courseContent.dataValues);
 							} else {
 								contentData.push({
@@ -352,11 +356,12 @@ const CourseResolvers = {
 							}
 						})
 					);
-
+					
+					
 					const courseProgress = await TrackCourse.findCourseByLanguageId(userId, languageId, courseId);
-
+         
 					const data = {
-						currentChapter: courseProgress.dataValues.currentChapter,
+						currentChapter:courseProgress===null?0: courseProgress.dataValues.currentChapter,
 						rootContent: rootContentData,
 						contentData,
 					};

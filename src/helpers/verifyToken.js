@@ -13,11 +13,9 @@ class verifyTokens {
   	}
   	try {
   		const decodedToken = jwt.verify(token, process.env.JWTKEY);
-
   		const user = await UserServices.findUserByEmail(
-  			decodedToken.payload.email,
-  		);
-
+			  decodedToken.payload.email,
+			  );
   		decodedToken.token = token;
   		if (user === undefined) {
   			return response.errorMessage(

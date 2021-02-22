@@ -6,11 +6,11 @@ import isValid from '../middlewares/validate';
 import verifyToken from '../middlewares/verifyToken';
 import verifyAdmin from '../middlewares/verify.admin';
 
-import '../config/passport.config';
+import '../config/passport.config'; 
 
 const router = express.Router();
 
-router.post('/signup', Validate.signup(), isValid, userController.signup);
+router.post('/signup', Validate.signup(), isValid,userController.signup);
 router.post('/signin', Validate.signin(), isValid, userController.signIn);
 router.post('/social-signup-mobile', userController.googleAndFacebookMobileSignUp);
 router.post('/social-signin-mobile', userController.googleAndFacebookMobileSignIn);

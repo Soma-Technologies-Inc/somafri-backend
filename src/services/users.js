@@ -112,6 +112,10 @@ class UserServices {
 		return updatedUser;
 	}
 
+	static async updateGuestUser(guestEmail, NewUser) {
+		return db.user.update( NewUser , { where: { email:guestEmail } });
+	}
+
 	static async getUsers() {
 		try {
 			const searchUsers = await db.user.findAndCountAll({
