@@ -224,6 +224,56 @@ class CoursesController {
 		}
 	}
 
+	static async getCourseContents(req, res) {
+		try {
+			const { page } = req.query;
+			const limit = 10;
+			const offset = Paginate(page, limit);
+			const { languageId, courseId } = req.params;
+			const findCourse = await CoursesServices.getCoursesByLanguage(
+				languageId,
+				courseId,
+			);
+			if (findCourse) {
+				const { rootCourseId } = findCourse;
+				const findRootContents = await rootContentServices.findContentByField(
+					limit,
+					offset,
+					'rootCourseId',
+					rootCourseId,
+				);
+				const contentData = [];
+				let a = -1;
+				await Promise.all(
+					findRootContents.rows.map(async () => {
+						const { id } = findRootContents.rows[(a += 1)].dataValues;
+						const courseContent = await ContentServices.findContentByRootIdAndByLanguage(
+							id,
+							languageId,
+						);
+						if (courseContent) {
+							contentData.push(courseContent.dataValues);
+						} else {
+							contentData.push({
+								content: 'no content yet',
+								contentAudio: 'no audio yet',
+							});
+						}
+					}),
+				);
+				const data = {
+					rootContent: findRootContents.rows,
+					contentData,
+				};
+				return response.successMessage(res, 'List of contents', 200, data);
+			}
+
+			return response.errorMessage(res, 'No courses found', 404);
+		} catch (e) {
+			return response.errorMessage(res, e.message, 500);
+		}
+	}
+
 	static async getLearnContents(req, res) {
 		try {
 			const { page } = req.query;
