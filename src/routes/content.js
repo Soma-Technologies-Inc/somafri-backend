@@ -23,6 +23,13 @@ router.post('/rootContent', verifyToken.headerToken, verifyAdmin, [
 	RootContentController.addContent,
 ]);
 
+router.get(
+	'/rootContent',
+	verifyToken.headerToken,
+	verifyAdmin,
+	RootContentController.getRootContents,
+);
+
 router.delete(
 	'/rootContent/:id',
 	verifyToken.headerToken,

@@ -44,6 +44,24 @@ class RootContentController {
 		}
 	}
 
+	static async getRootContents(req, res) {
+		try {
+			const getRootContents = await RootContentServices.getContents(
+			);
+			if (!getRootContents) {
+				return response.errorMessage(res, 'Root content not found', 404);
+			}
+			return response.successMessage(
+				res,
+				'Root Content retrieved successfully',
+				200,
+				getRootContents,
+			);
+		} catch (e) {
+			return response.errorMessage(res, e.message, 500);
+		}
+	}
+
 	static async deleteContent(req, res) {
 		try {
 			const { id } = req.params;
