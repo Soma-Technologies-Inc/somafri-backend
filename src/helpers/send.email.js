@@ -323,8 +323,9 @@ class mailer {
       <img src="https://res.cloudinary.com/drpye5niv/image/upload/v1592941057/somafri_ashoka.png" width="125" height="120" style="display: block; border: 0px;" />
       </td>
           <div class="Email-wrapper_body">
-              <div class="Email-wrapper_body_name">contactUs message from ${messageDetails.email}!</div>
-              <div class="Email-wrapper_body_message">Message: ${messageDetails.message}</br>  </br>
+              <div class="Email-wrapper_body_name">Contact message from ${messageDetails.email}!</div>
+              <div class="Email-wrapper_body_message">Question: ${messageDetails.question}</div>
+              <div class="Email-wrapper_body_message">Description: ${messageDetails.description}</div></br>  </br>
               </br>  </br>  </br> </div>
           </div>
   
@@ -336,7 +337,7 @@ class mailer {
 		return view;
 	}
 
-	static contactUsmessageView(userName) {
+	static contactUsMessageView(userName) {
 		const view = `<!DOCTYPE html>
   <html lang="en">
   <head>

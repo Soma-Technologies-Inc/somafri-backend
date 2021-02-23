@@ -113,7 +113,7 @@ class UserServices {
 	}
 
 	static async updateGuestUser(guestEmail, NewUser) {
-		return db.user.update( NewUser , { where: { email:guestEmail } });
+		return db.user.update(NewUser, { where: { email: guestEmail } });
 	}
 
 	static async getUsers() {
