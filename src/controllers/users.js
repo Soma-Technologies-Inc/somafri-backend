@@ -60,7 +60,7 @@ class UserController {
 				token,
 				role:"standard"
 			};
-			const createUser =guestEmail=== null? await UserServices.CreateUser(NewUser):await UserServices.updateUser(guestEmail,NewUser);
+			const createUser =guestEmail=== null? await UserServices.CreateUser(NewUser):await UserServices.updateGuestUser(guestEmail,NewUser);
 			const PrimaryLanguageKey = findLanguage.language_key;
 
 			const translateResults = await translate.translateMail(
