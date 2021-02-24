@@ -95,8 +95,7 @@ class ContentServices {
 
 	static async findContentByRootIdAndByLanguage(rootContentId, languageId) {
 		try {
-			
-			const data =await db.content.findOne({
+			const data = await db.content.findOne({
 				attributes: [
 					'id',
 					'rootContentId',

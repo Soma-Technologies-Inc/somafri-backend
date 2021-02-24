@@ -328,7 +328,7 @@ const CourseResolvers = {
 							);
 							console.log('=-=-=-=-=-==-=', primaryLanguageContent);
 							const primaryLanguageData = {
-								id:primaryLanguageContent.dataValues.id,
+								id: primaryLanguageContent.dataValues.id,
 								rootCourseId: course1.dataValues.rootCourseId,
 								chapter: course1.dataValues.chapter,
 								content: primaryLanguageContent.dataValues.content,
@@ -336,7 +336,7 @@ const CourseResolvers = {
 								contentAudio: primaryLanguageContent.dataValues.contentAudio,
 
 							};
-							if (primaryLanguageContent!==null) {
+							if (primaryLanguageContent !== null) {
 								rootContentData.push(await primaryLanguageData);
 							} else {
 								rootContentData.push(course1.dataValues);
@@ -346,7 +346,7 @@ const CourseResolvers = {
 								id,
 								languageId
 							);
-							if (courseContent!==null) {
+							if (courseContent !== null) {
 								contentData.push(await courseContent.dataValues);
 							} else {
 								contentData.push({
@@ -356,12 +356,11 @@ const CourseResolvers = {
 							}
 						})
 					);
-					
-					
+
 					const courseProgress = await TrackCourse.findCourseByLanguageId(userId, languageId, courseId);
-         
+
 					const data = {
-						currentChapter:courseProgress===null?0: courseProgress.dataValues.currentChapter,
+						currentChapter: courseProgress === null ? 0 : courseProgress.dataValues.currentChapter,
 						rootContent: rootContentData,
 						contentData,
 					};

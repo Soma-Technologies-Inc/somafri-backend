@@ -12,10 +12,9 @@ import LanguageHelper from '../helpers/languages.helper';
 
 environment.config();
 class UserController {
-	
 	static async signup(req, res) {
 		try {
-			const guestEmail = req.body.guestEmail !==undefined?req.body.guestEmail:null;
+			const guestEmail = req.body.guestEmail !== undefined ? req.body.guestEmail : null;
 			const {
 				firstName,
 				lastName,
@@ -42,7 +41,7 @@ class UserController {
 			const token = GenerateToken({
 				lastName, firstName, email, primaryLanguageId, isVerified: false,
 			});
-			const NewUser =guestEmail=== null? {
+			const NewUser = guestEmail === null ? {
 				firstName,
 				lastName,
 				email,
@@ -50,7 +49,7 @@ class UserController {
 				primaryLanguageId,
 				isVerified: false,
 				token,
-			}:{
+			} : {
 				firstName,
 				lastName,
 				email,
@@ -58,9 +57,11 @@ class UserController {
 				primaryLanguageId,
 				isVerified: false,
 				token,
-				role:"standard"
+				role: 'standard'
 			};
-			const createUser =guestEmail=== null? await UserServices.CreateUser(NewUser):await UserServices.updateGuestUser(guestEmail,NewUser);
+			const createUser = guestEmail === null
+				? await UserServices.CreateUser(NewUser)
+				: await UserServices.updateGuestUser(guestEmail, NewUser);
 			const PrimaryLanguageKey = findLanguage.language_key;
 
 			const translateResults = await translate.translateMail(

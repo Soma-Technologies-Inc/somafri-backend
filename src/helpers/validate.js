@@ -59,7 +59,8 @@ class Validate {
 				'email',
 				'Invalid email address, example: example@gmail.com.'
 			).isEmail(),
-			check('message', 'message must be provided.')
+			check('question', 'question type must be provided.').isString(),
+			check('description', 'message must be provided.')
 				.isString()
 				.isLength({ min: 3 }),
 		];
@@ -152,10 +153,7 @@ class Validate {
 				.isString()
 				.isLength({ min: 3 })
 				.notEmpty(),
-			check(
-				'purposeOfLearning',
-				'purposeOfLearning should be a valid.'
-			)
+			check('purposeOfLearning', 'purposeOfLearning should be a valid.')
 				.isString()
 				.isLength({ min: 3 })
 				.not()
