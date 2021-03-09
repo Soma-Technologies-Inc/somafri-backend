@@ -67,7 +67,7 @@ class CoursesController {
 			if (updatedData) {
 				return response.successMessage(
 					res,
-					'Content updated successfully',
+					'course updated successfully',
 					200,
 					updatedData,
 				);
@@ -91,7 +91,7 @@ class CoursesController {
 					200,
 				);
 			}
-			return response.errorMessage(res, 'check your content id', 404);
+			return response.errorMessage(res, 'check your course id', 404);
 		} catch (e) {
 			return response.errorMessage(res, e.message, 500);
 		}

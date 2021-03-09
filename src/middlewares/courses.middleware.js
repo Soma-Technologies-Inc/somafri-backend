@@ -17,6 +17,15 @@ class CoursesMiddleware {
 		return next();
 	}
 
+	static async findIfRootLanguage(req, res, next) {
+		const { languageId } = req.body;
+
+		if (languageId) {
+			return response.errorMessage(res, "Language id can't be changed", 403);
+		}
+		return next();
+	}
+
 	static async findIfLevelExist(req, res, next) {
 		const { levelId } = req.body;
 

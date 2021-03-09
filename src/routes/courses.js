@@ -27,7 +27,7 @@ router.patch(
 			maxCount: 1,
 		},
 	]),
-	courseMiddleware.findIfLanguageExist,
+	courseMiddleware.findIfRootLanguage,
 	courseMiddleware.findIfLevelExist,
 	CoursesController.editRootCourse
 );
