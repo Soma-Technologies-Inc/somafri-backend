@@ -170,6 +170,7 @@ class CoursesServices {
 						model: db.language,
 					},
 				],
+				order: [['id', 'ASC']],
 			});
 			return rootCourses;
 		} catch (error) {

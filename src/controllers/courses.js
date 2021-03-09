@@ -102,7 +102,7 @@ class CoursesController {
 			const rootCourses = await CoursesServices.getRootCourses();
 			return response.successMessage(
 				res,
-				'root course created successfully',
+				'list of root courses',
 				201,
 				rootCourses,
 			);
