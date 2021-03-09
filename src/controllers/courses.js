@@ -56,6 +56,47 @@ class CoursesController {
 		}
 	}
 
+	static async editRootCourse(req, res) {
+		try {
+			const { id } = req.params;
+			if (req.files.courseIcon) {
+				req.body.courseIcon = req.files.courseIcon[0].location;
+			}
+			await CoursesServices.updateRootCourse(id, req.body);
+			const updatedData = await CoursesServices.findIfRootCourseExist(id);
+			if (updatedData) {
+				return response.successMessage(
+					res,
+					'Content updated successfully',
+					200,
+					updatedData,
+				);
+			}
+			return response.errorMessage(res, 'Root course not found', 404);
+		} catch (e) {
+			return response.errorMessage(res, e.message, 500);
+		}
+	}
+
+	static async deleteRootCourses(req, res) {
+		try {
+			const { id } = req.params;
+			const deleteCourse = await CoursesServices.deleteRootCourse(
+				id,
+			);
+			if (deleteCourse) {
+				return response.successMessage(
+					res,
+					'root course deleted successfully',
+					200,
+				);
+			}
+			return response.errorMessage(res, 'check your content id', 404);
+		} catch (e) {
+			return response.errorMessage(res, e.message, 500);
+		}
+	}
+
 	static async getRootCourses(req, res) {
 		try {
 			const rootCourses = await CoursesServices.getRootCourses();
@@ -86,6 +127,45 @@ class CoursesController {
 				201,
 				courses,
 			);
+		} catch (e) {
+			return response.errorMessage(res, e.message, 500);
+		}
+	}
+
+	static async editCourse(req, res) {
+		try {
+			const { id } = req.params;
+			await CoursesServices.updateCourse(id, req.body);
+
+			const updatedData = await CoursesServices.getCourse(id);
+			if (updatedData) {
+				return response.successMessage(
+					res,
+					'Content updated successfully',
+					200,
+					updatedData,
+				);
+			}
+			return response.errorMessage(res, 'Root course not found', 404);
+		} catch (e) {
+			return response.errorMessage(res, e.message, 500);
+		}
+	}
+
+	static async deleteCourse(req, res) {
+		try {
+			const { id } = req.params;
+			const deleteCourse = await CoursesServices.deleteCourse(
+				id,
+			);
+			if (deleteCourse) {
+				return response.successMessage(
+					res,
+					'course deleted successfully',
+					200,
+				);
+			}
+			return response.errorMessage(res, 'check your content id', 404);
 		} catch (e) {
 			return response.errorMessage(res, e.message, 500);
 		}

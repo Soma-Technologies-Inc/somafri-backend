@@ -176,5 +176,55 @@ class CoursesServices {
 			return error;
 		}
 	}
+
+	static async updateRootCourse(
+		id, contentData,
+	) {
+		try {
+			return await db.rootCourse.update(
+				contentData,
+				{ where: { id } },
+			);
+		} catch (error) {
+			return null;
+		}
+	}
+
+	static async updateCourse(
+		id, contentData,
+	) {
+		try {
+			return await db.course.update(
+				contentData,
+				{ where: { id } },
+			);
+		} catch (error) {
+			return null;
+		}
+	}
+
+	static async deleteRootCourse(id) {
+		try {
+			return await db.rootCourse.destroy({
+				where: {
+					id,
+				},
+			});
+		} catch (error) {
+			return null;
+		}
+	}
+
+	static async deleteCourse(id) {
+		try {
+			return await db.course.destroy({
+				where: {
+					id,
+				},
+			});
+		} catch (error) {
+			return null;
+		}
+	}
 }
 export default CoursesServices;
