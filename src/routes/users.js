@@ -23,5 +23,6 @@ router.patch('/passWordReset', verifyToken.headerToken, userController.logout);
 router.patch('/logout', verifyToken.headerToken, userController.logout);
 router.post('/guest', userController.createGuestAccount);
 router.delete('/guest', userController.removeGuestsAccounts);
+router.patch('/user/:id', verifyToken.headerToken, verifyAdmin, userController.activateDeactivate);
 
 export default router;

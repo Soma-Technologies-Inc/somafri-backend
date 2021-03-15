@@ -6,15 +6,16 @@ import GenerateToken from '../helpers/token';
 const checkEmailpassword = async (req, res) => {
 	const user = await UserServices.findUserByEmail(req.body.email);
 	if (user == null) {
-		const status = 404;
-		return response.errorMessage(res, 'Could not found the user in our system', status);
+		return response.errorMessage(res, 'Could not found the user in our system', 404);
+	}
+	if (!user.status) {
+		return response.errorMessage(res, 'your account is deactivated please contact the the system admin', 403);
 	}
 	if (!comparePassword(req.body.password, user.password)) {
-		const status = 401;
 		return response.errorMessage(
 			res,
 			'Email or password does not match',
-			status,
+			401,
 		);
 	}
 	const token = GenerateToken({
