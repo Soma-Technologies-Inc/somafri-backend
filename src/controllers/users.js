@@ -406,6 +406,18 @@ class UserController {
 			return response.errorMessage(res, error.message, 500);
 		}
 	}
+
+	static async getUsers(req, res) {
+		try {
+			const users = await UserServices.countUsers();
+			if (users.count > 0) {
+				return response.successMessage(res, 'list of users', 200, users);
+			}
+			return response.errorMessage(res, 'no user found in system', 404);
+		} catch (error) {
+			return response.errorMessage(res, error.message, 500);
+		}
+	}
 }
 
 export default UserController;
