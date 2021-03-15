@@ -9,6 +9,7 @@ import mailer from '../helpers/send.email';
 import translate from '../helpers/translate';
 import checkEmailpassword from '../middlewares/users';
 import LanguageHelper from '../helpers/languages.helper';
+import dashboardUserServices from '../services/dashboard/dashboard.user';
 
 environment.config();
 class UserController {
@@ -377,6 +378,30 @@ class UserController {
 				'All guests were deleted successfully',
 				200,
 			);
+		} catch (error) {
+			return response.errorMessage(res, error.message, 500);
+		}
+	}
+
+	static async activateDeactivate(req, res) {
+		try {
+			const { id } = req.params;
+			if (isNaN(id)) {
+				return response.errorMessage(res, 'your id must be an integer', 400);
+			}
+			const findUser = await UserServices.findUser(parseInt(id));
+			if (!findUser) {
+				return response.errorMessage(res, 'the user not found in system', 404);
+			}
+			const { status } = findUser;
+			const activateDeactivate = await dashboardUserServices.activateDeactivate(id, !status);
+			if (!activateDeactivate) {
+				return response.errorMessage(res, 'something went wrong try again.', 500);
+			}
+			if (status) {
+				return response.successMessage(res, 'account deactivated successfully', 200);
+			}
+			return response.successMessage(res, 'account activated successfully', 200);
 		} catch (error) {
 			return response.errorMessage(res, error.message, 500);
 		}
