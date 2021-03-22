@@ -5,6 +5,7 @@ import Validate from '../helpers/validate';
 import isValid from '../middlewares/validate';
 import verifyToken from '../middlewares/verifyToken';
 import verifyAdmin from '../middlewares/verify.admin';
+import verifySuperAdmin from '../middlewares/verify.superAdmin';
 
 import '../config/passport.config';
 
@@ -25,5 +26,6 @@ router.post('/guest', userController.createGuestAccount);
 router.delete('/guest', userController.removeGuestsAccounts);
 router.patch('/user/:id', verifyToken.headerToken, verifyAdmin, userController.activateDeactivate);
 router.get('/users', verifyToken.headerToken, verifyAdmin, userController.getUsers);
-
+router.get('/role', verifyToken.headerToken, verifyAdmin, Validate.userEmail(), isValid, userController.getUserRole);
+router.patch('/role', verifyToken.headerToken, verifySuperAdmin, Validate.userEmail(), Validate.userRole(), isValid, userController.editUserRole);
 export default router;

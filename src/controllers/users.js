@@ -418,6 +418,32 @@ class UserController {
 			return response.errorMessage(res, error.message, 500);
 		}
 	}
+
+	static async getUserRole(req, res) {
+		const findUser = await UserServices.findUserByEmail(req.body.email);
+		if (!findUser) {
+			return response.errorMessage(res, 'user email not registered!', 404);
+		}
+		return response.successMessage(res, 'user', 200, {
+			userEmail: findUser.email,
+			userRole: findUser.role,
+		});
+	}
+
+	static async editUserRole(req, res) {
+		const findUser = await UserServices.findUserByEmail(req.body.email);
+		if (findUser) {
+			const updateRole = await UserServices.updateUserRole(req.body.email, req.body.role);
+			if (updateRole) {
+				return response.successMessage(res, 'Role updated successfully', 200, {
+					userEmail: findUser.email,
+					userRole: req.body.role,
+				});
+			}
+			return response.errorMessage(res, 'Check well the entered user role', 400);
+		}
+		return response.errorMessage(res, 'user email not registered!', 404);
+	}
 }
 
 export default UserController;
