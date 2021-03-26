@@ -109,6 +109,33 @@ class LanguageServices {
 		}
 	}
 
+	static async monthlyEnrollments(startYear, startMonth) {
+		let learnings;
+		if (startMonth === 12) {
+			learnings = db.learning.findAll({
+				where: {
+					createdAt: {
+						[Op.gte]: new Date(`${startYear}-${startMonth}-01`),
+						[Op.lt]: new Date(`${startYear}-${startMonth}-31`)
+					}
+				},
+				order: [['id', 'ASC']],
+			});
+		} else {
+			learnings = db.learning.findAll({
+				where: {
+					createdAt: {
+						[Op.gte]: new Date(`${startYear}-${startMonth}-01`),
+						[Op.lt]: new Date(`${startYear}-${startMonth + 1}-01`)
+					}
+				},
+				order: [['id', 'ASC']],
+			});
+		}
+
+		return learnings;
+	}
+
 	static async enrollToLanguage(data) {
 		return Queries.create(db.learning, data);
 	}
@@ -127,6 +154,10 @@ class LanguageServices {
 
 	static async getAllLevels() {
 		return Queries.getAllLevels(db.level);
+	}
+
+	static async findEnrollments() {
+		return Queries.getEnrollments(db.learning);
 	}
 
 	static async getLanguageUsers(languageId) {

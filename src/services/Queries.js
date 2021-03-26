@@ -147,12 +147,14 @@ class Queries {
 
 	static async getMyEnrolledLanguages(table, userId) {
 		try {
-			const EnrolledLanguage = await table.findAll({ where: { userId },
+			const EnrolledLanguage = await table.findAll({
+				where: { userId },
 				include: [
 					{
 						model: db.language,
 					},
-				], });
+				],
+			});
 			return EnrolledLanguage;
 		} catch (error) {
 			return error;
@@ -239,6 +241,22 @@ class Queries {
 	static async findContentsQuestion(table, rootContentId) {
 		const data = await table.findOne({ where: rootContentId });
 		return data;
+	}
+
+	static async getEnrollments(table) {
+		try {
+			const EnrolledLanguage = await table.findAll({
+				include: [
+					{
+						model: db.language,
+					},
+				],
+				order: [['createdAt', 'ASC']],
+			});
+			return EnrolledLanguage;
+		} catch (error) {
+			return error;
+		}
 	}
 }
 export default Queries;

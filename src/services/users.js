@@ -1,7 +1,9 @@
 import { emit } from 'nodemon';
+import sequelize from 'sequelize';
 import db from '../database/models';
 import Queries from './Queries';
 
+const { Op } = sequelize;
 class UserServices {
 	static async CreateUser(NewUser) {
 		try {
@@ -171,7 +173,34 @@ class UserServices {
 	}
 
 	static async countUsers() {
-		const users = await db.user.findAndCountAll();
+		const users = await db.user.findAndCountAll({ order: [['createdAt', 'ASC']] });
+		return users;
+	}
+
+	static async monthlyUsers(startYear, startMonth) {
+		let users;
+		if (startMonth === 12) {
+			users = db.user.findAll({
+				where: {
+					createdAt: {
+						[Op.gte]: new Date(`${startYear}-${startMonth}-01`),
+						[Op.lt]: new Date(`${startYear}-${startMonth}-31`)
+					}
+				},
+				order: [['id', 'ASC']],
+			});
+		} else {
+			users = db.user.findAll({
+				where: {
+					createdAt: {
+						[Op.gte]: new Date(`${startYear}-${startMonth}-01`),
+						[Op.lt]: new Date(`${startYear}-${startMonth + 1}-01`)
+					}
+				},
+				order: [['id', 'ASC']],
+			});
+		}
+
 		return users;
 	}
 }
