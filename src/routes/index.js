@@ -18,6 +18,7 @@ import questionRoute from './questions';
 import testRoute from './result';
 import contactRoute from './contact';
 import uploader from './uploader';
+import statistics from './statistics';
 
 const Router = express.Router();
 Router.use('/auth', userRoute);
@@ -38,5 +39,6 @@ Router.use('/survey', surveyRoute);
 Router.use('/questions', questionRoute);
 Router.use('/contact', contactRoute);
 Router.use('/uploader', uploader);
+Router.use('/statistics', statistics);
 
 export default Router;
