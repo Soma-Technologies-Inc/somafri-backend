@@ -11,12 +11,31 @@ router.get(
 	verifyAdmin,
 	statisticsController.getMonthlyUsers
 );
+router.get(
+	'/statistics-dates',
+	verifyToken.headerToken,
+	verifyAdmin,
+	statisticsController.getStatisticsDate
+);
+router.get(
+	'/annual-users/:year',
+	verifyToken.headerToken,
+	verifyAdmin,
+	statisticsController.getAnnualUsers
+);
 
 router.get(
 	'/month-enrollments',
 	verifyToken.headerToken,
 	verifyAdmin,
 	statisticsController.getMonthlyEnrollment
+);
+
+router.get(
+	'/annual-enrollments/:year',
+	verifyToken.headerToken,
+	verifyAdmin,
+	statisticsController.getAnnualEnrollments
 );
 
 export default router;
