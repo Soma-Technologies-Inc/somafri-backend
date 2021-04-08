@@ -203,5 +203,22 @@ class UserServices {
 
 		return users;
 	}
+
+	static async yearUsers(year) {
+		try {
+			const users = db.user.findAndCountAll({
+				where: {
+					createdAt: {
+						[Op.gte]: new Date(`${year}-01-01`),
+						[Op.lt]: new Date(`${year}-12-31`)
+					}
+				},
+				order: [['id', 'ASC']],
+			});
+			return users;
+		} catch (error) {
+			return error;
+		}
+	}
 }
 export default UserServices;
