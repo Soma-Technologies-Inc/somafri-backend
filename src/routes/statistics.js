@@ -25,6 +25,13 @@ router.get(
 );
 
 router.get(
+	'/years-users',
+	verifyToken.headerToken,
+	verifyAdmin,
+	statisticsController.getYearsUsers
+);
+
+router.get(
 	'/month-enrollments',
 	verifyToken.headerToken,
 	verifyAdmin,
