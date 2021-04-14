@@ -6,16 +6,16 @@ import verifyAdmin from '../middlewares/verify.admin';
 const router = express.Router();
 
 router.get(
-	'/month-users',
-	verifyToken.headerToken,
-	verifyAdmin,
-	statisticsController.getMonthlyUsers
-);
-router.get(
 	'/statistics-dates',
 	verifyToken.headerToken,
 	verifyAdmin,
 	statisticsController.getStatisticsDate
+);
+router.get(
+	'/month-users',
+	verifyToken.headerToken,
+	verifyAdmin,
+	statisticsController.getMonthlyUsers
 );
 router.get(
 	'/annual-users/:year',
@@ -23,14 +23,12 @@ router.get(
 	verifyAdmin,
 	statisticsController.getAnnualUsers
 );
-
 router.get(
 	'/years-users',
 	verifyToken.headerToken,
 	verifyAdmin,
 	statisticsController.getYearsUsers
 );
-
 router.get(
 	'/month-enrollments',
 	verifyToken.headerToken,
@@ -45,4 +43,10 @@ router.get(
 	statisticsController.getAnnualEnrollments
 );
 
+router.get(
+	'/years-enrollments',
+	verifyToken.headerToken,
+	verifyAdmin,
+	statisticsController.getYearsEnrollments
+);
 export default router;
