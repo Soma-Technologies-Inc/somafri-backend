@@ -202,6 +202,38 @@ class statisticsController {
 		}
 	}
 
+	static async getYearsEnrollments(req, res) {
+		try {
+			const somaEnrollments = await LanguageServices.findEnrollments();
+			const firstEnrollment = somaEnrollments[0];
+			const lastEnrollment = somaEnrollments[somaEnrollments.length - 1];
+
+			const firstEnrollmentYear = firstEnrollment.createdAt.getFullYear();
+			const lastEnrollmentYear = lastEnrollment.createdAt.getFullYear();
+
+			const yearsEnrollments = [];
+			async function asyncCall() {
+				for (let i = firstEnrollmentYear; i <= lastEnrollmentYear; i += 1) {
+					const enrollments = await LanguageServices.yearEnrollments(i);
+					yearsEnrollments.push({
+						year: i,
+						totalEnrollments: enrollments.count
+					});
+				}
+				return yearsEnrollments;
+			}
+			const somaYearsEnrollments = await asyncCall();
+			return response.successMessage(
+				res,
+				'Soma Different Years Enrollments',
+				200,
+				somaYearsEnrollments
+			);
+		} catch (e) {
+			return response.errorMessage(res, e.message, 500);
+		}
+	}
+
 	static async getMonthlyEnrollment(req, res) {
 		try {
 			const somaEnrollments = await LanguageServices.findEnrollments();

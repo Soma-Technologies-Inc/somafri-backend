@@ -96,7 +96,8 @@ class LanguageServices {
 		}
 	}
 
-	static async updateEnrolledLanguage(userId, languageId, currentLevel, currentCourseId, currentCourseName) {
+	static async updateEnrolledLanguage(userId, languageId,
+		currentLevel, currentCourseId, currentCourseName) {
 		try {
 			return await db.learning.update(
 				{
@@ -134,6 +135,23 @@ class LanguageServices {
 		}
 
 		return learnings;
+	}
+
+	static async yearEnrollments(year) {
+		try {
+			const enrollments = db.learning.findAndCountAll({
+				where: {
+					createdAt: {
+						[Op.gte]: new Date(`${year}-01-01`),
+						[Op.lt]: new Date(`${year}-12-31`)
+					}
+				},
+				order: [['id', 'ASC']],
+			});
+			return enrollments;
+		} catch (error) {
+			return error;
+		}
 	}
 
 	static async enrollToLanguage(data) {
