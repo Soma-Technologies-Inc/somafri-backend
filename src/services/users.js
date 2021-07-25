@@ -173,7 +173,27 @@ class UserServices {
 	}
 
 	static async countUsers() {
-		const users = await db.user.findAndCountAll({ order: [['createdAt', 'ASC']] });
+		const users = await db.user.findAndCountAll({
+			attributes: [
+				'id',
+				'firstName',
+				'lastName',
+				'isVerified',
+				'profileImage',
+				'email',
+				'role',
+				'gender',
+				'birthdate',
+				'country',
+				'primaryLanguageId',
+				'authtype',
+				'status',
+				'type',
+				'createdAt',
+				'updatedAt',
+			],
+			order: [['createdAt', 'ASC']]
+		});
 		return users;
 	}
 
