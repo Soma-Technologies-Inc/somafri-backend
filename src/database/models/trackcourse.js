@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
 		courseId: DataTypes.INTEGER,
 		courseIcon: DataTypes.STRING,
 		courseComplexity: DataTypes.INTEGER,
+		testResult: DataTypes.INTEGER,
 		levelCourses: DataTypes.INTEGER,
 		courseName: DataTypes.STRING,
 		translatedCourseName: DataTypes.STRING,
