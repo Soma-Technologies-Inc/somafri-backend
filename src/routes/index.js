@@ -19,6 +19,7 @@ import testRoute from './result';
 import contactRoute from './contact';
 import uploader from './uploader';
 import statistics from './statistics';
+import subscribe from './subscribe.routes';
 
 const Router = express.Router();
 Router.use('/auth', userRoute);
@@ -40,5 +41,6 @@ Router.use('/questions', questionRoute);
 Router.use('/contact', contactRoute);
 Router.use('/uploader', uploader);
 Router.use('/statistics', statistics);
+Router.use('/subscribe', subscribe);
 
 export default Router;

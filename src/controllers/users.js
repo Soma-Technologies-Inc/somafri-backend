@@ -10,6 +10,7 @@ import translate from '../helpers/translate';
 import checkEmailpassword from '../middlewares/users';
 import LanguageHelper from '../helpers/languages.helper';
 import dashboardUserServices from '../services/dashboard/dashboard.user';
+import subscribeServices from '../services/subscribe.services';
 
 environment.config();
 class UserController {
@@ -69,6 +70,11 @@ class UserController {
 				PrimaryLanguageKey
 			);
 
+			const findEmail = await subscribeServices.findSubscribe(email);
+			if (!findEmail) {
+				await subscribeServices.CreateSubscribe({ email });
+			}
+
 			const emailView = mailer.activateAccountView(token, firstName, translateResults);
 			mailer.sendEmail(email, 'Verification link', emailView);
 
@@ -121,6 +127,10 @@ class UserController {
 			primaryLanguageId: user.primaryLanguageId,
 			token,
 		};
+		const findEmail = await subscribeServices.findSubscribe(req.body.email);
+		if (!findEmail) {
+			await subscribeServices.CreateSubscribe({ email: req.body.email });
+		}
 		return response.successMessage(
 			res,
 			'user has logged in successfully',
@@ -158,6 +168,10 @@ class UserController {
 		};
 		const userCreated = await UserServices.findOrCreateUser(userData);
 		const findLanguage = await LanguageServices.getLanguage(primaryLanguageId);
+		const findEmail = await subscribeServices.findSubscribe(email);
+		if (!findEmail) {
+			await subscribeServices.CreateSubscribe({ email });
+		}
 		return response.successMessage(res, 'user created successfully', 201, {
 			id: userCreated.id,
 			firstName,
@@ -185,6 +199,10 @@ class UserController {
 				isVerified: true,
 				role: 'standard',
 			};
+			const findEmail = await subscribeServices.findSubscribe(profile.emails[0].value);
+			if (!findEmail) {
+				await subscribeServices.CreateSubscribe({ email: profile.emails[0].value });
+			}
 			const [userCreated] = await UserServices.findOrCreateUser(userData);
 			done(null, userCreated.dataValues);
 		} catch (error) {
@@ -214,6 +232,10 @@ class UserController {
 		let redirectUrl = '';
 		const userToFind = await UserServices.findUserByEmail(req.user.email);
 		const userInfo = JSON.stringify({ authtype, token });
+		const findEmail = await subscribeServices.findSubscribe(req.user.email);
+		if (!findEmail) {
+			await subscribeServices.CreateSubscribe({ email: req.user.email });
+		}
 		if (userToFind.dataValues.primaryLanguageId === null) {
 			redirectUrl = `${process.env.FRONTEND_USER_PROFILE_REDIRECT}?info=${userInfo}`;
 		} else {
