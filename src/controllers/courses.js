@@ -8,24 +8,6 @@ import LanguageServices from '../services/language';
 import CoursesHelper from '../helpers/courses.helper';
 
 class CoursesController {
-	static async addTestResult(req, res) {
-		const userId = req.user.id;
-		const { languageId, courseId } = req.params;
-		const { testResult } = req.body;
-		const savingResult = await TrackCourse.saveTestResult(
-			userId,
-			courseId,
-			languageId,
-			testResult,
-		);
-		return response.successMessage(
-			res,
-			' test result saved successfully',
-			200,
-			testResult,
-		);
-	}
-
 	static async createRootCourses(req, res) {
 		try {
 			const courseIcon = req.file.location;
@@ -552,6 +534,35 @@ class CoursesController {
 		} catch (e) {
 			return response.errorMessage(res, e.message, 500);
 		}
+	}
+
+	static async addTestResult(req, res) {
+		const userId = req.user.id;
+		const { languageId, courseId } = req.params;
+		const { testResult } = req.body;
+		const savingResult = await TrackCourse.saveTestResult(
+			userId,
+			courseId,
+			languageId,
+			testResult,
+		);
+		return response.successMessage(
+			res,
+			' test result saved successfully',
+			200,
+			testResult,
+		);
+	}
+
+	static async getTestResults(req, res) {
+		const testResults = await TrackCourse.getResults();
+		if (!testResults.length) return response.errorMessage(res, 'No test results found', 404);
+		return response.successMessage(
+			res,
+			' list of users results',
+			200,
+			testResults,
+		);
 	}
 }
 export default CoursesController;

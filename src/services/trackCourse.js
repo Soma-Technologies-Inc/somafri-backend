@@ -13,7 +13,19 @@ class TrackCourse {
 		try {
 			const searchMessages = await db.trackCourses.findAndCountAll({
 				where: { userId },
-				attributes: ['id', 'courseId', 'languageId', 'courseIcon', 'courseName', 'translatedCourseName', 'courseComplexity', 'levelCourses', 'currentChapter', 'totalChapter'],
+				attributes: [
+					'id',
+					'courseId',
+					'languageId',
+					'courseIcon',
+					'courseName',
+					'translatedCourseName',
+					'courseComplexity',
+					'testResult',
+					'levelCourses',
+					'currentChapter',
+					'totalChapter',
+				],
 				order: [['updatedAt', 'DESC']],
 			});
 			if (!searchMessages) return null;
@@ -58,14 +70,21 @@ class TrackCourse {
 		courseName,
 		translatedCourseName,
 		currentChapter,
-		totalChapter,
+		totalChapter
 	) {
 		try {
 			return await db.trackCourses.update(
 				{
-					courseId, courseIcon, courseComplexity, levelCourses, courseName, translatedCourseName, currentChapter, totalChapter,
+					courseId,
+					courseIcon,
+					courseComplexity,
+					levelCourses,
+					courseName,
+					translatedCourseName,
+					currentChapter,
+					totalChapter,
 				},
-				{ where: { id } },
+				{ where: { id } }
 			);
 		} catch (error) {
 			return null;
@@ -86,12 +105,7 @@ class TrackCourse {
 		}
 	}
 
-	static async saveTestResult(
-		userId,
-		courseId,
-		languageId,
-		testResult,
-	) {
+	static async saveTestResult(userId, courseId, languageId, testResult) {
 		try {
 			return await db.trackCourses.update(
 				{
@@ -99,18 +113,60 @@ class TrackCourse {
 				},
 				{
 					where: {
-						[Op.and]: [{
-							userId,
-						},
-						{
-							courseId,
-						},
-						{
-							languageId,
+						[Op.and]: [
+							{
+								userId,
+							},
+							{
+								courseId,
+							},
+							{
+								languageId,
+							},
+						],
+					},
+				}
+			);
+		} catch (error) {
+			return null;
+		}
+	}
+
+	static async getResults() {
+		try {
+			return await db.trackCourses.findAll({
+				where: { testResult: { [Op.not]: null } },
+				include: [
+					{
+						model: db.user,
+						attributes: [
+							'id',
+							'firstName',
+							'lastName',
+							'email',
+							'role',
+							'createdAt',
+							'updatedAt',
+						],
+					},
+					{
+						model: db.language,
+						attributes: ['id', 'name', 'countryId', 'duplicatedLanguageId', 'learnable', 'language_key', 'createdAt', 'updatedAt'],
+						include: [{
+							model: db.country,
 						}],
 					},
-				},
-			);
+					{
+						model: db.course,
+						attributes: ['id', 'name', 'rootCourseId'],
+						include: [{
+							model: db.rootCourse,
+							attributes: ['name', 'courseIcon'],
+						}],
+					},
+				],
+				order: [['testResult', 'DESC']],
+			});
 		} catch (error) {
 			return null;
 		}
