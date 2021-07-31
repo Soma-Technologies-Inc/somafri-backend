@@ -145,6 +145,7 @@ class TrackCourse {
 							'lastName',
 							'email',
 							'role',
+							'profileImage',
 							'createdAt',
 							'updatedAt',
 						],
